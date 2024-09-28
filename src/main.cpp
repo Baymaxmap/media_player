@@ -1,6 +1,7 @@
 #include "media.h"
 #include "view_media.h"
 #include "media_controller.h"
+#include "player_controller.h"
 
 int main(){
     std::string path;
@@ -9,7 +10,41 @@ int main(){
     std::shared_ptr<ViewMedia> viewMedia1 = std::make_shared<ViewMedia>();
     MediaController controller1(mediafile1, viewMedia1);
     controller1.updateView();
-    controller1.updateMediaFile("Title", "like i used to see u long long time");
-    controller1.updateView();
+    // controller1.updateMediaFile("Title", "like i used to see u long long time");
+    // controller1.updateView();
+    PlayerMediaController player;
+    player.init();
+    while(1){
+        int i;
+        std::cout<<"press 1 to play\n";
+        std::cout<<"press 2 to pause\n";
+        std::cout<<"press 3 to resume\n";
+        std::cout<<"press 4 to exit\n";
+        std::cin>>i;
+        switch(i){
+            case 1:{
+                player.play(mediafile1->getPathMedia());
+                break;
+            }
+            case 2:{
+                player.pause();
+                break;
+            }
+            case 3:{
+                player.resume();
+                break;
+            }
+            case 4:
+            {
+                player.end();
+                break;
+            }
+            default:{std::cout<<"not valid input\n"; break;}
+        }
+        if(i==4){
+            break;
+        }
+    }
+    return 0;
 }
 

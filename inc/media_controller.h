@@ -11,9 +11,9 @@ class MediaController{
     std::shared_ptr<ViewMedia> mViewMediaFile;
 public:
     MediaController(std::shared_ptr<MediaFile>, std::shared_ptr<ViewMedia>);
-    std::string getInfMedia() const;    //get the inf of Media file using MediaFile pointer
-    void updateMediaFile(std::string, std::string);
-    void updateMediaFile(std::string, int);
+    std::string getInfMedia() const;                //get the inf of Media file using MediaFile pointer
+    void updateMediaFile(std::string, std::string); //update the inf of media file
+    void updateMediaFile(std::string, int);     
     void updateView() const;
 };
 

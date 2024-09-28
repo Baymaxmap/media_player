@@ -12,8 +12,12 @@ MediaFile::MediaFile(std::string path) : mPath(path){
     }
 }
 
+//get the inf of media file
 std::string MediaFile::getInfMedia() const{
     return mMetadata->getInf();
+}
+std::string MediaFile::getPathMedia() const{
+    return mMetadata->getPath();
 }
 
 //update data from user

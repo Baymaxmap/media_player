@@ -17,15 +17,13 @@ public:
     Metadata(std::string);
     virtual std::string getInf() const;
     std::string getName() const;
+    std::string getPath() const;
     void updateMetadata(std::string, std::string);
     void updateMetadata(std::string, int);
 };
 
 //class MetadataAudio for audio file
 class MetadataAudio : public Metadata{
-    // int mSampleRate;
-    // int mBitRate;
-    // int mChannel;
 public:
     MetadataAudio(std::string);
     std::string getInf() const override;
@@ -33,7 +31,6 @@ public:
 
 //class MetadataVideo for video file
 class MetadataVideo : public Metadata{
-    // std::string mSize;
 public:
     MetadataVideo(std::string);
     std::string getInf() const override;

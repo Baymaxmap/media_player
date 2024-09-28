@@ -39,6 +39,11 @@ std::string Metadata::getName() const{
     return "";
 }
 
+//get the path of file
+std::string Metadata::getPath() const{
+    return mPath;
+}
+
 //update inf of media file
 void Metadata::updateMetadata(std::string field, std::string newValue){
     TagLib::FileRef filePath(mPath.c_str());

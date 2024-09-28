@@ -16,6 +16,7 @@ class MediaFile{
 public:
     MediaFile(std::string);
     std::string getInfMedia() const;
+    std::string getPathMedia() const;
     void updateMetadata(std::string, std::string);
     void updateMetadata(std::string, int);
 };

@@ -1,6 +1,6 @@
 CC = g++
-CFLAGS = -g -c -Wall -I$(INC_H)
-LDFLAGS = -ltag
+CFLAGS = -g -c -Wall -I$(INC_H) -I/usr/include/SDL2
+LDFLAGS = -ltag -lSDL2 -lSDL2_mixer
 SRC_C = src
 INC_H = inc
 BUILD_DIR = build
