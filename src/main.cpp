@@ -9,5 +9,7 @@ int main(){
     std::shared_ptr<ViewMedia> viewMedia1 = std::make_shared<ViewMedia>();
     MediaController controller1(mediafile1, viewMedia1);
     controller1.updateView();
+    controller1.updateMediaFile("Title", "like i used to see u long long time");
+    controller1.updateView();
 }
 
