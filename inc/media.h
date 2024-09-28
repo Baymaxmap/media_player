@@ -2,42 +2,21 @@
 #define MEDIA_H
 
 #include <iostream>
+#include <memory>
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
 
+#include "metadata.h"
+
 //General
 class MediaFile{
-    int mYear;
-    int mDuration;
     std::string mPath;
-    std::string mName;
-    std::string mArtist;
-    std::string mComment;
+    std::shared_ptr<Metadata> mMetadata;
 public:
     MediaFile(std::string);
-    virtual std::string getInf() const;
+    std::string getInfMedia() const;
 };
 
-
-//class AudioFile derived from MediaFile adding some more features
-class AudioFile : public MediaFile{
-    int mSampleRate;
-    int mBitRate;
-    int mChannel;
-public:
-    AudioFile(std::string);
-    std::string getInf() const override;
-};
-
-
-//class VideoFile derived from MediaFile adding some more features
-class VideoFile : public MediaFile{
-    std::string mSize;
-    std::string mDuration;
-public:
-    VideoFile(std::string);
-    std::string getInf() const override;
-};
 
 #endif

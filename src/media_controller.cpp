@@ -5,10 +5,10 @@ MediaController::MediaController(std::shared_ptr<MediaFile> mediaFile, std::shar
 
 //get the inf of MediaFile
 std::string MediaController::getInfMedia() const{
-    return mMediaFile->getInf();
+    return mMediaFile->getInfMedia();
 }
 
 //update view for media file
 void MediaController::updateView() const{
-    mViewMediaFile->showMediaInf(mMediaFile->getInf());
+    mViewMediaFile->showMediaInf(mMediaFile->getInfMedia());
 }
