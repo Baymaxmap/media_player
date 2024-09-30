@@ -41,15 +41,3 @@ std::list<std::string> Playlist::getPathAllFiles(){
     }
     return pathAllFiles;
 }
-
-
-//******************** TEST ********************** */
-void Playlist::show(){
-    std::cout<<"*********** INF OF PLAYLIST: **************\n";
-    for(auto&it : mPlaylist){
-        std::cout<<it.lock()->getNameMedia()<<std::endl;
-    }
-}
-void Playlist::testPlay(){
-
-}

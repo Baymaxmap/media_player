@@ -22,8 +22,6 @@ public:
 
     std::string getAllFilesInPlaylist() const;
     std::list<std::string> getPathAllFiles();
-    void show();
-    void testPlay();
 };
 
 
