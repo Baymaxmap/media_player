@@ -1,7 +1,7 @@
 #include "media_controller.h"
 
-MediaController::MediaController(std::shared_ptr<MediaFile> mediaFile, std::shared_ptr<ViewMedia> view)
-    : mMediaFile(mediaFile), mViewMediaFile(view){}
+MediaController::MediaController(std::shared_ptr<MediaFile> mediaFile)
+    : mMediaFile(mediaFile){}
 
 //get the inf of MediaFile
 std::string MediaController::getInfMedia() const{
@@ -18,5 +18,5 @@ void MediaController::updateMediaFile(std::string field, int newValue){
 
 //update view for media file
 void MediaController::updateView() const{
-    mViewMediaFile->showMediaInf(mMediaFile->getInfMedia());
+    ViewMedia::showMediaInf(mMediaFile->getInfMedia());
 }

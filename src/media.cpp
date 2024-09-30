@@ -19,6 +19,9 @@ std::string MediaFile::getInfMedia() const{
 std::string MediaFile::getPathMedia() const{
     return mMetadata->getPath();
 }
+std::string MediaFile::getNameMedia() const{
+    return mMetadata->getName();
+}
 
 //update data from user
 void MediaFile::updateMetadata(std::string field, std::string newValue){
