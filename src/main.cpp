@@ -50,19 +50,23 @@ int main(){
     //         break;
     //     }
     // }
-
+//****************** READ THE FOLDER AND STORE MEDIA FILES IN OBJECT ************************* */
     MediaManagement folderMedia("/home/thanhtb5/Documents/FPT/OJT_FRESHER/STUDY_APP/VSCODE/media/media_file");
     folderMedia.showAllMediaFiles();
-    std::cout<<"******* AFTER ADD A MEDIA FILE *******\n";
-    folderMedia.addMediaFile("/home/thanhtb5/Documents/FPT/OJT_FRESHER/STUDY_APP/VSCODE/taglib/audio_file/trong_com.mp3");
-    folderMedia.showAllMediaFiles();
 
-
+//****************** CREATE PLAYLIST AND ADD MEDIA FILES ************************* */
     folderMedia.addPlaylist("thanh ngu");
     folderMedia.getPlaylist("thanh ngu")->addMediaFile((size_t)0);
     folderMedia.getPlaylist("thanh ngu")->addMediaFile((size_t)1);
     std::shared_ptr<Playlist> playlist = folderMedia.getPlaylist("thanh ngu");
     playlist->show();
+
+    PlayerMediaController player;
+    while(1){
+        player.runPlaylist(playlist);
+        //player.end();
+        break;
+    }
 
     return 0;
 }

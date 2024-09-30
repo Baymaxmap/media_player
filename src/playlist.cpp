@@ -33,12 +33,23 @@ std::string Playlist::getAllFilesInPlaylist() const{
     return allFiles;
 }
 
+//get all the path of media files in playlist, store in list
+std::list<std::string> Playlist::getPathAllFiles(){
+    std::list<std::string> pathAllFiles;
+    for(auto& it : mPlaylist){
+        pathAllFiles.push_back(it.lock()->getPathMedia());
+    }
+    return pathAllFiles;
+}
 
 
-
+//******************** TEST ********************** */
 void Playlist::show(){
     std::cout<<"*********** INF OF PLAYLIST: **************\n";
     for(auto&it : mPlaylist){
         std::cout<<it.lock()->getNameMedia()<<std::endl;
     }
+}
+void Playlist::testPlay(){
+
 }

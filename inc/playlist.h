@@ -12,7 +12,7 @@ class MediaManagement;
 
 class Playlist{
     std::string mName;
-    std::list<std::weak_ptr<MediaFile>> mPlaylist;  
+    std::list<std::weak_ptr<MediaFile>> mPlaylist;
 //EXPLAIN for weak_ptr: when folder storing Media is destroyed, this playlist is destroyed too as no ref count increase
 public:
     Playlist();
@@ -21,8 +21,9 @@ public:
     void deleteMediaFile(std::string);
 
     std::string getAllFilesInPlaylist() const;
-    
+    std::list<std::string> getPathAllFiles();
     void show();
+    void testPlay();
 };
 
 
