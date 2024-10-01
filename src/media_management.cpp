@@ -26,7 +26,7 @@ void MediaManagement::addMediaFile(std::string filePath){
 }
 //create and add a playlist by its name
 void MediaManagement::addPlaylist(std::string namePlaylist){
-    if(mPlaylistManager.find(namePlaylist) != mPlaylistManager.end()){
+    if(mPlaylistManager.find(namePlaylist) == mPlaylistManager.end()){
         mPlaylistManager[namePlaylist] = std::make_shared<Playlist>(namePlaylist);
         std::cout<<"Succesfully add a playlist: "<<namePlaylist<<std::endl;
     }
@@ -141,6 +141,7 @@ void MediaManagement::updateNamePlaylist(std::string oldName, std::string newNam
     std::cout<<"**ERROR: invalid old name or new name of playlist, check again!\n";
 }
 
+//add a file into playlist
 void MediaManagement::addFileToPlaylist(std::string namePlaylist, size_t index){
     if(mPlaylistManager.find(namePlaylist) != mPlaylistManager.end()){
         mPlaylistManager[namePlaylist]->addMediaFile(index);
@@ -149,6 +150,14 @@ void MediaManagement::addFileToPlaylist(std::string namePlaylist, size_t index){
     std::cout<<"**ERROR: invalid name of playlist\n";
 }
 
+//delete a file from playlist by its path
+void MediaManagement::deleteFileInPlaylist(std::string namePlaylist, std::string filePath){
+    if(mPlaylistManager.find(namePlaylist) != mPlaylistManager.end()){
+        mPlaylistManager[namePlaylist]->deleteMediaFile(filePath);
+        return;
+    }
+    std::cout<<"**ERROR: invalid name of playlist\n";
+}
 /************************************** VIEW MEDIA FILES PER PAGE *****************************************/
 //show media files in current page
 void MediaManagement::showCurrentPage(){

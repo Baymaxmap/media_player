@@ -27,6 +27,7 @@ public:
 
 //********************* view menu of playlist menu *********************
     static void showEditPlaylistMenu(std::string);
+    static void showFilesToAddPlaylist(std::vector<std::shared_ptr<MediaFile>>&);
 };
 
 #endif

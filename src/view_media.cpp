@@ -19,7 +19,7 @@ void ViewMedia::showMediaInfInFolder(std::string infMediaInFolder){
 void ViewMedia::showAllPlaylist(std::string infPlaylist){
     std::cout<<"\n=================== INF OF ALL PLALIST ===================\n";
     std::cout<<infPlaylist<<std::endl;
-    std::cout<<"\n==========================================================\n";
+    std::cout<<"==========================================================\n";
 }
 
 //view media files in folder
@@ -73,5 +73,13 @@ void ViewMedia::showEditPlaylistMenu(std::string namePlaylist){
     std::cout<<"5. Back to previous menu";
     std::cout<<"\n=====================================================\n";
     std::cout<<"Enter your choice: ";
+}
+
+void ViewMedia::showFilesToAddPlaylist(std::vector<std::shared_ptr<MediaFile>>& mediaFiles){
+    std::cout<<"\n=================== ADD FILE INTO PLAYLIST ===================\n";
+    for(size_t i = 0; i<mediaFiles.size(); i++){
+        std::cout<<i+1<<". "<<mediaFiles[i]->getNameMedia()<<std::endl;
+    }
+    std::cout<<"\n==========================================================\n";
 }
 

@@ -14,6 +14,7 @@ void Playlist::addMediaFile(size_t index){
     }
 }
 
+//delete a file from playlist by its path
 void Playlist::deleteMediaFile(std::string filePath){
     std::list<std::weak_ptr<MediaFile>>::iterator fileErase = mPlaylist.end();
     for(auto it = mPlaylist.begin(); it != mPlaylist.end(); it++){
@@ -24,6 +25,7 @@ void Playlist::deleteMediaFile(std::string filePath){
     mPlaylist.erase(fileErase);
 }
 
+//update a new name for playlist
 void Playlist::updateNamePlaylist(std::string newName){
     mName = newName;
 }

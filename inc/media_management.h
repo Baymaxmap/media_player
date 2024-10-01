@@ -45,6 +45,7 @@ public:
 /************************************** MANAGE A PLAYLIST **************************************/
     void updateNamePlaylist(std::string, std::string);
     void addFileToPlaylist(std::string, size_t);
+    void deleteFileInPlaylist(std::string, std::string);
 
 /************************************** MANAGE A MEDIA FILE **************************************/
 //get details inf of media file
