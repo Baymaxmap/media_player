@@ -24,6 +24,10 @@ void Playlist::deleteMediaFile(std::string filePath){
     mPlaylist.erase(fileErase);
 }
 
+void Playlist::updateNamePlaylist(std::string newName){
+    mName = newName;
+}
+
 //get all name of files in playlist
 std::string Playlist::getAllFilesInPlaylist() const{
     std::string allFiles = "";

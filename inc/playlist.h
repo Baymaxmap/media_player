@@ -17,8 +17,10 @@ class Playlist{
 public:
     Playlist();
     Playlist(std::string);
+//manage playlist
     void addMediaFile(size_t);
     void deleteMediaFile(std::string);
+    void updateNamePlaylist(std::string);
 
     std::string getAllFilesInPlaylist() const;
     std::list<std::string> getPathAllFiles();

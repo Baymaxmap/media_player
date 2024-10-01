@@ -5,10 +5,10 @@ int MediaManagement::mIndex = 0;
 std::vector<std::shared_ptr<MediaFile>> MediaManagement::mMediaManager;
 std::map<std::string, std::shared_ptr<Playlist>> MediaManagement::mPlaylistManager;
 
-MediaManagement::MediaManagement(){}
+MediaManagement::MediaManagement() : mCurrentPage(0){}
 
 //constructor that take in the folder path to traverse the folder and add all MediaFile objects to unordered_map
-MediaManagement::MediaManagement(std::string folderPath){
+MediaManagement::MediaManagement(std::string folderPath) : mCurrentPage(0) {
     for(const auto& entry : std::filesystem::directory_iterator(folderPath)){
         if(entry.is_regular_file() && entry.path().extension() == ".mp3"){
             std::string filePath = entry.path().string();
@@ -18,7 +18,7 @@ MediaManagement::MediaManagement(std::string folderPath){
     }
 }
 
-/************************************** ADD MEDIA FILES AND PLAYLIST INTO OBJECT *****************************************/
+/************************************** MANAGE MEDIA FILES AND PLAYLIST INTO OBJECT *****************************************/
 //add a media file by its path
 void MediaManagement::addMediaFile(std::string filePath){
     MediaFile mediaFile(filePath);
@@ -26,7 +26,21 @@ void MediaManagement::addMediaFile(std::string filePath){
 }
 //create and add a playlist by its name
 void MediaManagement::addPlaylist(std::string namePlaylist){
-    mPlaylistManager[namePlaylist] = std::make_shared<Playlist>(namePlaylist);
+    if(mPlaylistManager.find(namePlaylist) != mPlaylistManager.end()){
+        mPlaylistManager[namePlaylist] = std::make_shared<Playlist>(namePlaylist);
+        std::cout<<"Succesfully add a playlist: "<<namePlaylist<<std::endl;
+    }
+    else{
+        std::cout<<"Playlist "<<namePlaylist<<" is already existed! Cannot create\n";
+    }
+}
+//delete playlist by its name
+void MediaManagement::deletePlaylist(std::string namePlaylist){
+    if(mPlaylistManager.find(namePlaylist) != mPlaylistManager.end()){
+        mPlaylistManager.erase(namePlaylist);
+        return;
+    }
+    std::cout<<"NO playlist named "<<namePlaylist<<" found!\n";
 }
 
 /************************************** GET GENERAL INF OF MEDIA, PLAYLIST *****************************************/
@@ -102,7 +116,7 @@ void MediaManagement::updateMediaFile(size_t index, std::string field, int newVa
 void MediaManagement::showInfMediaFile(size_t index) const{
     ViewMedia::showMediaInf(mMediaManager[index]->getInfMedia());
 }
-//show all current media files 
+//show all current media files
 void MediaManagement::showAllMediaFiles() const{
     ViewMedia::showMediaInfInFolder(this->getAllMediaFiles());
 }
@@ -115,6 +129,61 @@ void MediaManagement::showAllFilesInPlaylist(std::string namePlaylist) const{
     ViewMedia::showFilesInPlaylist(this->getAllFilesInPlaylist(namePlaylist));
 }
 
+/************************************** MANAGE A PLAYLIST *****************************************/
+void MediaManagement::updateNamePlaylist(std::string oldName, std::string newName){
+    if(mPlaylistManager.find(oldName) != mPlaylistManager.end() && mPlaylistManager.find(newName) == mPlaylistManager.end()){
+        std::shared_ptr<Playlist> storePlaylist = mPlaylistManager[oldName];
+        mPlaylistManager.erase(oldName);
+        mPlaylistManager[newName] = storePlaylist;
+        storePlaylist->updateNamePlaylist(newName);
+        return;
+    }
+    std::cout<<"**ERROR: invalid old name or new name of playlist, check again!\n";
+}
+
+void MediaManagement::addFileToPlaylist(std::string namePlaylist, size_t index){
+    if(mPlaylistManager.find(namePlaylist) != mPlaylistManager.end()){
+        mPlaylistManager[namePlaylist]->addMediaFile(index);
+        return;
+    }
+    std::cout<<"**ERROR: invalid name of playlist\n";
+}
+
+/************************************** VIEW MEDIA FILES PER PAGE *****************************************/
+//show media files in current page
+void MediaManagement::showCurrentPage(){
+    if(mMediaManager.empty()){
+        std::cout<<"NO media files found!\n";
+        return;
+    }
+    size_t start = mCurrentPage * ITEMS_PER_PAGE;
+    size_t end = ((mMediaManager.size() < (start + ITEMS_PER_PAGE))? mMediaManager.size() :(start + ITEMS_PER_PAGE));
+    ViewMedia::showMediaInfPerPage(mMediaManager, start, end);
+}
+
+//show media files next page
+void MediaManagement::showNextPage(){
+    if((mCurrentPage+1) * ITEMS_PER_PAGE < mMediaManager.size()){
+        mCurrentPage++;
+        showCurrentPage();
+    }
+    else{
+        std::cout<<"You are on the last page!\n";
+        std::cout<<"Enter the number to play, or press (b) to back to main menu: ";
+    }
+}
+
+//show media files in previous page
+void MediaManagement::showPreviousPage(){
+    if(mCurrentPage == 0){
+        std::cout<<"You are on the first page!\n";
+        std::cout<<"Enter the number to play, or press (b) to back to main menu: ";
+        return;
+    }
+    mCurrentPage--;
+    showCurrentPage();
+}
+
 
 //get shared_ptr<Playlist>
 std::shared_ptr<Playlist> MediaManagement::getPlaylist(const std::string& namePlaylist){
@@ -122,4 +191,9 @@ std::shared_ptr<Playlist> MediaManagement::getPlaylist(const std::string& namePl
         return mPlaylistManager[namePlaylist];
     }
     return nullptr;
+}
+
+//get vector of media files
+std::vector<std::shared_ptr<MediaFile>>& MediaManagement::getVectorMediaFile(){
+    return mMediaManager;
 }

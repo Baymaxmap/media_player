@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
-#include <taglib/tag.h>
 
 //general metadata for media file
 class Metadata{
