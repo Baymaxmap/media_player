@@ -15,9 +15,9 @@ class PlayerMediaController{
 
     bool mIsPlaying;
     Mix_Music* mMusic;
-//mCurrenTrack is used for handling playing Playlist
-    std::list<std::string>::iterator mCurrentTrackPlaylist;
-    std::list<std::string> mPlaylist;
+//handling playing Playlist
+    std::list<std::string>::iterator mCurrentTrack;
+    std::list<std::string> mListToPlay;
 public:
     PlayerMediaController();
     ~PlayerMediaController();
@@ -31,7 +31,9 @@ public:
     void musicEndedPlaylist();
     void nextTrackInPlaylist();
     void previousTrackInPlaylist();
+
     void runPlaylist(std::shared_ptr<Playlist>);
+    void runListMediaFiles(std::list<std::string>);
 };
 
 #endif

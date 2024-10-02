@@ -8,6 +8,7 @@ This folder is used to store all the media files in it, no matter where they are
 #include <unordered_map>
 #include <map>
 #include <vector>
+#include <list>
 #include <iostream>
 #include <memory>
 #include <filesystem>
@@ -19,6 +20,7 @@ This folder is used to store all the media files in it, no matter where they are
 #define ITEMS_PER_PAGE 10
 
 class Playlist;
+class ViewMedia;
 
 class MediaManagement{
     static int mIndex;
@@ -32,10 +34,6 @@ public:
     MediaManagement(std::string);
 
 /*************************** MANAGE VECTOR OF FILES AND MAP OF PLAYLIST *****************************/
-    void addMediaFile(std::string);
-    void addPlaylist(std::string);
-    void deletePlaylist(std::string);
-
 //get general Inf of media files and playlist
     std::string getAllMediaFiles() const;
     std::string getAllPlaylistName() const;
@@ -43,6 +41,8 @@ public:
 
 
 /************************************** MANAGE A PLAYLIST **************************************/
+    void addPlaylist(std::string);
+    void deletePlaylist(std::string);
     void updateNamePlaylist(std::string, std::string);
     void addFileToPlaylist(std::string, size_t);
     void deleteFileInPlaylist(std::string, std::string);
@@ -55,12 +55,13 @@ public:
 //update metadata of media file
     void updateMediaFile(size_t, std::string, std::string);
     void updateMediaFile(size_t, std::string, int);
-
+//add a media file to vector by its path
+    void addMediaFile(std::string);
 
 /*************************** RETURN VECTOR AND POINTER *****************************/
-    std::shared_ptr<Playlist> getPlaylist(const std::string&);
-    std::vector<std::shared_ptr<MediaFile>>& getVectorMediaFile();
-
+    std::shared_ptr<Playlist> getPlaylist(const std::string&);      //return a smart pointer Playlist by its name
+    std::vector<std::shared_ptr<MediaFile>>& getVectorMediaFile();  //return the vecotr mMediaManger
+    std::list<std::string> getListMediaFiles();                     //get all path of media files, store into a list
 
 /************************************** UPDATE VIEW **************************************/
 //use View class to show Inf of all media files and playlists

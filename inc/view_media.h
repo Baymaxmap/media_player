@@ -8,6 +8,8 @@
 #include "media.h"
 #include "media_management.h"
 
+class MediaManagement;
+
 class ViewMedia{
 public:
 //view a media file
@@ -36,8 +38,11 @@ public:
 
 //view menu of edit/view metadata
     static void showEditViewMetadata(MediaManagement&, char = 'c');
-    static void showEditViewMetadata(MediaManagement&, size_t); //1111111111111111111111111111111111111
+    static void showEditViewMetadata(MediaManagement&, size_t);
 
+//view menu of play music: show option play music for all files or for a specific playlist
+    static void showPlayMusic();
+    static void showOptionPlayMusic();
 //other feature
     static void showErrorInput();
 };

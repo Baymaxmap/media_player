@@ -92,7 +92,7 @@ void ViewMedia::showFilesToAddPlaylist(std::vector<std::shared_ptr<MediaFile>>& 
     std::cout<<"\n==========================================================\n";
 }
 
-//********************* EDIT/VIEW METADATA OF FILE ***********************/ 1111111111111111111111111111111111
+//********************* EDIT/VIEW METADATA OF FILE ***********************/
 void ViewMedia::showEditViewMetadata(MediaManagement& mediaManagement, char flag){
     std::cout<<"\n\n=================== VIEW/EDIT METADATA OF A FILE ===================\n";
     if(flag == 'c'){mediaManagement.showCurrentPage();}
@@ -103,6 +103,25 @@ void ViewMedia::showEditViewMetadata(MediaManagement& mediaManagement, char flag
     std::cout<<"Choose which file you want to view/edit (enter the number): ";
 }
 
+//********************* PLAY MUSIC MENU ***********************/
+void ViewMedia::showPlayMusic(){
+    std::cout<<"\n\n=================== PLAY MUSIC ===================\n";
+    std::cout<<"1. Play music all current media files\n";
+    std::cout<<"2. Play music from a specific playlist\n";
+    std::cout<<"3. Back\n";
+    std::cout<<"====================================================\n";
+}
+
+void ViewMedia::showOptionPlayMusic(){
+    std::cout<<"\n====================================================\n";
+    std::cout<<"1. Play playlist\n";
+    std::cout<<"2. Pause\n";
+    std::cout<<"3. Resume\n";
+    std::cout<<"4. Next Track\n";
+    std::cout<<"5. Previous Track\n";
+    std::cout<<"6. Exit\n";
+    std::cout<<"====================================================\n";
+}
 
 /************************************** OTHER FEATURES *****************************************/
 void ViewMedia::showErrorInput(){

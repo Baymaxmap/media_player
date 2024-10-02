@@ -204,3 +204,12 @@ std::shared_ptr<Playlist> MediaManagement::getPlaylist(const std::string& namePl
 std::vector<std::shared_ptr<MediaFile>>& MediaManagement::getVectorMediaFile(){
     return mMediaManager;
 }
+
+//get list of media files
+std::list<std::string> MediaManagement::getListMediaFiles(){
+    std::list<std::string> listMediaFiles;
+    for(auto& it : mMediaManager){
+        listMediaFiles.push_back(it->getPathMedia());
+    }
+    return listMediaFiles;
+}

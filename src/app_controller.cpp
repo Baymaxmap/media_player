@@ -29,6 +29,7 @@ void AppController::run(){
             }
             case '4':
             {
+                managePlayMusic();
                 break;
             }
             case '5':
@@ -278,6 +279,44 @@ void AppController::manageMediaFile(){
     }
 }
 
+
+/************************************** MANAGE PLAY MUSIC *****************************************/
+void AppController::managePlayMusic(){
+//show menu of playmusic
+    while(1)
+    {
+        ViewMedia::showPlayMusic();
+        char inputPlayOption;
+        std::cin>>inputPlayOption;
+        std::cin.ignore();
+
+        switch(inputPlayOption){
+        //case '1': play all current media files
+            case '1':
+            {
+                mPlayerController.runListMediaFiles(mMediaManagementController.getListMediaFiles());
+                break;
+            }
+        //case '2': play a spaecific playlist by its name
+            case '2':
+            {
+                mMediaManagementController.showAllPlaylist();
+                std::cout<<"Enter EXACTLY the name of playlist that you want to play: ";
+                std::string namePlaylist;
+                std::getline(std::cin, namePlaylist);
+                if(mMediaManagementController.getPlaylist(namePlaylist)){
+                    mPlayerController.runPlaylist(mMediaManagementController.getPlaylist(namePlaylist));
+                }
+                else{
+                    std::cout<<"NO found any playlist name "<<namePlaylist<<std::endl;
+                }
+                break;
+            }
+            case '3':{break;}
+        }
+        if(inputPlayOption == '3'){break;}
+    }
+}
 
 
 /************************************** OTHER FEATURES *****************************************/
