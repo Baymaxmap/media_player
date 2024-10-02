@@ -297,7 +297,7 @@ void AppController::managePlayMusic(){
                 mPlayerController.runListMediaFiles(mMediaManagementController.getListMediaFiles());
                 break;
             }
-        //case '2': play a spaecific playlist by its name
+        //case '2': play a specific playlist by its name
             case '2':
             {
                 mMediaManagementController.showAllPlaylist();

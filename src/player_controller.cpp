@@ -1,7 +1,7 @@
 #include "player_controller.h"
 PlayerMediaController* PlayerMediaController::sControllerInstance = nullptr;
 
-PlayerMediaController::PlayerMediaController() : mIsPlaying(false){
+PlayerMediaController::PlayerMediaController() : mIsPlaying(false), mTimePaused(0){
     mMusic = nullptr;
     sControllerInstance = this;
 }
@@ -30,7 +30,7 @@ void PlayerMediaController::init(){
         return;
     }
 }
-
+//*********************************** MANAGE PLAYING MUSIC ***********************************/
 //play file media
 void PlayerMediaController::play(std::string filePath){
     mMusic = Mix_LoadMUS(filePath.c_str());
@@ -46,6 +46,9 @@ void PlayerMediaController::play(std::string filePath){
         std::cout << "Can't play music: " << Mix_GetError() << std::endl;
     }
     else{
+        mStartTime = std::chrono::steady_clock::now(); // Start timing
+        mIsPlaying = true;
+        mTimePaused = 0;
         std::cout<<"Playing "<<filePath<<std::endl;
     }
 
@@ -56,6 +59,9 @@ void PlayerMediaController::pause(){
     if(mIsPlaying){
         Mix_PauseMusic();
         mIsPlaying = false;
+
+        //store the time that is paused
+        mTimePaused += std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - mStartTime).count();
         std::cout << "Music is paused.\n";
         return;
     }
@@ -68,6 +74,7 @@ void PlayerMediaController::resume(){
     if (!mIsPlaying) {
         Mix_ResumeMusic();
         mIsPlaying = true;
+        mStartTime = std::chrono::steady_clock::now();
         std::cout << "Music resumed.\n";
     } else {
         std::cout << "Music is already playing.\n";
@@ -76,6 +83,7 @@ void PlayerMediaController::resume(){
 
 void PlayerMediaController::end(){
     Mix_HookMusicFinished(nullptr);
+    mIsPlaying = false;
     if (Mix_PlayingMusic()) {
         Mix_HaltMusic();
     }
@@ -103,7 +111,7 @@ void PlayerMediaController::previousTrackInPlaylist(){
     play(*mCurrentTrack);
 }
 
-
+//*********************************** MANAGE AUTO PLAY NEXT WHEN A SONG ENDED ***********************************/
 //function when end a media file
 void PlayerMediaController::musicEndedPlaylistStatic(){
 
@@ -127,6 +135,43 @@ void PlayerMediaController::musicEndedPlaylist(){
     mIsPlaying = true;
 }
 
+//*********************************** MANAGE DISPLAY CURRENT TIME ***********************************/
+//get current play time
+int PlayerMediaController::getCurrentPlayTime(){
+    if(mIsPlaying){
+        auto currentTime = std::chrono::steady_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::seconds>(currentTime - mStartTime);
+        return (static_cast<int>(duration.count()) + mTimePaused);
+    }
+    return mTimePaused;
+}
+
+// format time in mm:ss format
+std::string PlayerMediaController::formatTime(int seconds){
+    int minutes = seconds / 60;
+    int secs = seconds % 60;
+    char buffer[6];
+    snprintf(buffer, sizeof(buffer), "%02d:%02d", minutes, secs);
+    return std::string(buffer);
+}
+
+// show time in real time
+void PlayerMediaController::showTimeInRealTime(){
+    while (mIsPlaying) {
+        std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+        if (mIsPlaying) { // Only display if still playing
+            int playTime = getCurrentPlayTime();
+            std::cout   << "\rCurrent play time: " << formatTime(playTime) 
+                        << "\t||\tEnter your option: "<<std::flush; // Overwrite the previous output
+        }
+    }
+    if(!mIsPlaying){
+        int playTime = getCurrentPlayTime();
+        std::cout   << "\rCurrent play time: " << formatTime(playTime) 
+                    << "\t||\tEnter your option: "<<std::flush; // Overwrite the previous output
+    }
+}
+
 //implement run playlist
 void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
     init();
@@ -145,7 +190,8 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
             case '1':{
                 if(!mIsPlaying){
                     play(*mCurrentTrack);
-                    mIsPlaying = true;
+                    std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
+                    playMusic.detach();
                 }
                 else{
                     std::cout<<"Music is already playing!\n";
@@ -164,6 +210,8 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
             case '3':{
                 if(!mIsPlaying){
                     resume();
+                    std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
+                    playMusic.detach();
                 }
                 else{
                     std::cout<<"Music is already playing!\n";
@@ -173,16 +221,19 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
             case '4':
             {
                 nextTrackInPlaylist();
+                std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
+                playMusic.detach();
                 break;
             }
             case '5':
             {
                 previousTrackInPlaylist();
+                std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
+                playMusic.detach();
                 break;
             }
             case '6':
             {
-                mIsPlaying = false;
                 std::cout<<"Stop playing music!!!\n";
                 end();
                 break;
@@ -215,7 +266,10 @@ void PlayerMediaController::runListMediaFiles(std::list<std::string> listMediaFi
             case '1':{
                 if(!mIsPlaying){
                     play(*mCurrentTrack);
-                    mIsPlaying = true;
+
+                    //create a thread to display real time
+                    std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
+                    playMusic.detach();
                 }
                 else{
                     std::cout<<"Music is already playing!\n";
@@ -234,6 +288,8 @@ void PlayerMediaController::runListMediaFiles(std::list<std::string> listMediaFi
             case '3':{
                 if(!mIsPlaying){
                     resume();
+                    std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
+                    playMusic.detach();
                 }
                 else{
                     std::cout<<"Music is already playing!\n";
@@ -243,16 +299,19 @@ void PlayerMediaController::runListMediaFiles(std::list<std::string> listMediaFi
             case '4':
             {
                 nextTrackInPlaylist();
+                std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
+                playMusic.detach();
                 break;
             }
             case '5':
             {
                 previousTrackInPlaylist();
+                std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
+                playMusic.detach();
                 break;
             }
             case '6':
             {
-                mIsPlaying = false;
                 std::cout<<"Stop playing music\n";
                 end();
                 break;

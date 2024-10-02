@@ -5,6 +5,8 @@
 #include <string>
 #include <filesystem>
 #include <memory>
+#include <thread>
+#include <chrono>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
@@ -18,6 +20,11 @@ class PlayerMediaController{
 //handling playing Playlist
     std::list<std::string>::iterator mCurrentTrack;
     std::list<std::string> mListToPlay;
+
+//handling display current time when playing music
+    int mTimePaused;
+    std::chrono::time_point<std::chrono::steady_clock> mStartTime;
+
 public:
     PlayerMediaController();
     ~PlayerMediaController();
@@ -34,6 +41,11 @@ public:
 
     void runPlaylist(std::shared_ptr<Playlist>);
     void runListMediaFiles(std::list<std::string>);
+
+//manage display current time when playing music
+    int getCurrentPlayTime();
+    std::string formatTime(int);    // format time in mm:ss format
+    void showTimeInRealTime();
 };
 
 #endif
