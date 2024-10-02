@@ -110,17 +110,19 @@ void ViewMedia::showPlayMusic(){
     std::cout<<"2. Play music from a specific playlist\n";
     std::cout<<"3. Back\n";
     std::cout<<"====================================================\n";
+    std::cout<<"Enter your otion: ";
 }
 
 void ViewMedia::showOptionPlayMusic(){
     std::cout<<"\n====================================================\n";
-    std::cout<<"1. Play playlist\n";
+    std::cout<<"1. Start playing music\n";
     std::cout<<"2. Pause\n";
     std::cout<<"3. Resume\n";
     std::cout<<"4. Next Track\n";
     std::cout<<"5. Previous Track\n";
-    std::cout<<"6. Exit\n";
+    std::cout<<"6. Stop and exit\n";
     std::cout<<"====================================================\n";
+    std::cout<<"Enter your option: ";
 }
 
 /************************************** OTHER FEATURES *****************************************/

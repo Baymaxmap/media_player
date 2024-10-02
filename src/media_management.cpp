@@ -24,6 +24,7 @@ void MediaManagement::addMediaFile(std::string filePath){
     MediaFile mediaFile(filePath);
     mMediaManager.push_back(std::make_shared<MediaFile>(filePath));
 }
+
 //create and add a playlist by its name
 void MediaManagement::addPlaylist(std::string namePlaylist){
     if(mPlaylistManager.find(namePlaylist) == mPlaylistManager.end()){
@@ -34,6 +35,7 @@ void MediaManagement::addPlaylist(std::string namePlaylist){
         std::cout<<"Playlist "<<namePlaylist<<" is already existed! Cannot create\n";
     }
 }
+
 //delete playlist by its name
 void MediaManagement::deletePlaylist(std::string namePlaylist){
     if(mPlaylistManager.find(namePlaylist) != mPlaylistManager.end()){

@@ -75,8 +75,32 @@ void PlayerMediaController::resume(){
 }
 
 void PlayerMediaController::end(){
-    Mix_CloseAudio();
-    SDL_Quit();
+    Mix_HookMusicFinished(nullptr);
+    if (Mix_PlayingMusic()) {
+        Mix_HaltMusic();
+    }
+    if (mMusic != nullptr) {
+        Mix_FreeMusic(mMusic);
+        mMusic = nullptr;
+    }
+}
+
+//play next track in playlist
+void PlayerMediaController::nextTrackInPlaylist(){
+    ++mCurrentTrack;
+    if(mCurrentTrack==mListToPlay.end()){
+        mCurrentTrack = mListToPlay.begin();
+    }
+    play(*mCurrentTrack);
+}
+
+//play previous track in playlist
+void PlayerMediaController::previousTrackInPlaylist(){
+    if(mCurrentTrack == mListToPlay.begin()){
+        mCurrentTrack = mListToPlay.end();
+    }
+    --mCurrentTrack;
+    play(*mCurrentTrack);
 }
 
 
@@ -106,7 +130,7 @@ void PlayerMediaController::musicEndedPlaylist(){
 //implement run playlist
 void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
     init();
-    
+    mIsPlaying =false;
     //call static function to call a non static function
     Mix_HookMusicFinished(musicEndedPlaylistStatic);
 
@@ -159,7 +183,7 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
             case '6':
             {
                 mIsPlaying = false;
-                std::cout<<"end program\n";
+                std::cout<<"Stop playing music!!!\n";
                 end();
                 break;
             }
@@ -171,28 +195,12 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
     }
 }
 
-//play next track in playlist
-void PlayerMediaController::nextTrackInPlaylist(){
-    ++mCurrentTrack;
-    if(mCurrentTrack==mListToPlay.end()){
-        mCurrentTrack = mListToPlay.begin();
-    }
-    play(*mCurrentTrack);
-}
-
-//play previous track in playlist
-void PlayerMediaController::previousTrackInPlaylist(){
-    if(mCurrentTrack == mListToPlay.begin()){
-        mCurrentTrack = mListToPlay.end();
-    }
-    --mCurrentTrack;
-    play(*mCurrentTrack);
-}
-
 
 
 //implement running all media files
 void PlayerMediaController::runListMediaFiles(std::list<std::string> listMediaFiles){
+    init();
+    mIsPlaying =false;
     //call static function to call a non static function
     Mix_HookMusicFinished(musicEndedPlaylistStatic);
 
@@ -245,7 +253,7 @@ void PlayerMediaController::runListMediaFiles(std::list<std::string> listMediaFi
             case '6':
             {
                 mIsPlaying = false;
-                std::cout<<"end program\n";
+                std::cout<<"Stop playing music\n";
                 end();
                 break;
             }
