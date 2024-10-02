@@ -178,7 +178,6 @@ void MediaManagement::showNextPage(){
     }
     else{
         std::cout<<"You are on the last page!\n";
-        std::cout<<"Enter the number to play, or press (b) to back to main menu: ";
     }
 }
 
@@ -186,7 +185,6 @@ void MediaManagement::showNextPage(){
 void MediaManagement::showPreviousPage(){
     if(mCurrentPage == 0){
         std::cout<<"You are on the first page!\n";
-        std::cout<<"Enter the number to play, or press (b) to back to main menu: ";
         return;
     }
     mCurrentPage--;

@@ -8,13 +8,21 @@
 class AppController{
     MediaManagement& mMediaManagementController;
     PlayerMediaController& mPlayerController;
+
 public:
     AppController(MediaManagement&, PlayerMediaController&);
+    
 // run the app
     void run();
+
 //******************** MAIN MENU ***********************/
     void browseMediaFiles();    //option 1: browse media files
     void managePlaylist();      //option 2: playlist
+    void manageMediaFile();     //option 3: metadata
+
+//other features
+    bool checkIsChar(const std::string&);
+    bool checkIsNumber(const std::string&);
 };
 
 

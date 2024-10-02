@@ -10,6 +10,7 @@ void AppController::run(){
         ViewMedia::showAppMainMenu();
         char inputMenu;
         std::cin>>inputMenu;
+        std::cin.ignore();
         switch(inputMenu){
             case '1':
             {
@@ -23,6 +24,7 @@ void AppController::run(){
             }
             case '3':
             {
+                manageMediaFile();
                 break;
             }
             case '4':
@@ -42,25 +44,24 @@ void AppController::run(){
     }
 }
 
-/************************************** BROWSE MEDIA FILES*****************************************/
+/************************************** BROWSE MEDIA FILES *****************************************/
 void AppController::browseMediaFiles(){
-    mMediaManagementController.showCurrentPage();
-    std::cin.ignore();
+    ViewMedia::showBrowseMedia(mMediaManagementController);
     while(1){
         std::string inputBrosweFile;
         std::getline(std::cin, inputBrosweFile);
         char inputChar;
         int numPlay;
 //check input is char or not
-        if (inputBrosweFile.length() == 1 && std::isalpha(inputBrosweFile[0])) {
+        if (checkIsChar(inputBrosweFile)) {
             inputChar = inputBrosweFile[0];
             switch(inputChar){
                 case 'n':{
-                    mMediaManagementController.showNextPage();
+                    ViewMedia::showBrowseMedia(mMediaManagementController, inputChar);
                     break;
                 }
                 case 'p':{
-                    mMediaManagementController.showPreviousPage();
+                    ViewMedia::showBrowseMedia(mMediaManagementController, inputChar);
                     break;
                 }
                 case 'b':{
@@ -71,14 +72,7 @@ void AppController::browseMediaFiles(){
         }
 //check input is digit or not
         else{
-            bool isNumber = true;
-            for (char c : inputBrosweFile) {
-                if (!std::isdigit(c)) {
-                    isNumber = false;
-                    break;
-                }
-            }
-            if(isNumber){
+            if(checkIsNumber(inputBrosweFile)){
                 numPlay = std::stoi(inputBrosweFile);
                 if((size_t)numPlay >= 0 || (size_t)numPlay < (mMediaManagementController.getVectorMediaFile()).size() ){
                     std::string filePlay = mMediaManagementController.getVectorMediaFile()[(size_t)numPlay]->getPathMedia();
@@ -212,4 +206,93 @@ void AppController::managePlaylist(){
         }
         if(inputPlaylistMenu == 5){break;}
     }
+}
+
+/************************************** MANAGE EDIT/VIEW METADATA *****************************************/
+void AppController::manageMediaFile(){
+    char inputChar = 'c';
+    int inputNum;
+    while(1){
+        std::string inputMetadata;
+        ViewMedia::showEditViewMetadata(mMediaManagementController, inputChar);
+        std::getline(std::cin, inputMetadata);
+        
+    //input is a char
+        if(checkIsChar(inputMetadata)){
+            inputChar = inputMetadata[0];
+            if(inputChar == 'b'){break;}
+            if(inputChar != 'n' && inputChar != 'p'){
+                ViewMedia::showErrorInput();
+                inputChar = 'c';
+            }
+        }
+
+    //input is a number
+        else{
+            if(checkIsNumber(inputMetadata)){
+                inputNum = std::stoi(inputMetadata);
+                mMediaManagementController.showInfMediaFile((size_t)inputNum);  //show inf of media file chosen
+                std::cout<<"Do you want to edit this file [y/n]: ";
+                char inputOption;
+                std::cin>>inputOption;
+                std::cin.ignore();
+                switch(inputOption){
+                
+                //user want to edit the metadata of that file chosen
+                    case 'y':
+                    {
+                        std::string field;
+                        std::cout<<"Enter EXACTLY the field that you want to change: ";
+                        std::getline(std::cin, field);
+                        
+                        std::cout<<"Enter the new value that you want to subtitute: ";
+                        std::string newValue;
+                        std::getline(std::cin, newValue);
+
+                        //update new value for metadata of media file
+                        if(checkIsNumber(newValue)){
+                            int value = std::stoi(newValue);
+                            mMediaManagementController.updateMediaFile((size_t)inputNum, field, value);
+                        }
+                        else{
+                            mMediaManagementController.updateMediaFile((size_t)inputNum, field, newValue);
+                        }
+                        break;
+                    }
+                //user do not want to edit the metadata of that file chosen
+                    case 'n':
+                    {
+                        break;
+                    }
+                    default:{
+                        ViewMedia::showErrorInput();
+                        break;
+                    }
+                }
+            }
+            else{
+                ViewMedia::showErrorInput();
+            }
+            inputChar = 'c';
+        }
+    }
+}
+
+
+
+/************************************** OTHER FEATURES *****************************************/
+bool AppController::checkIsChar(const std::string& input){
+    if (input.length() == 1 && std::isalpha(input[0])){
+        return true;
+    }
+    return false;
+}
+
+bool AppController::checkIsNumber(const std::string& input){
+    for (char c : input) {
+        if (!std::isdigit(c)) {
+            return false;
+        }
+    }
+    return true;
 }

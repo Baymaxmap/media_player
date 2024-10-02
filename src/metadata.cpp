@@ -76,6 +76,7 @@ void Metadata::updateMetadata(std::string field, int newValue){
         mMetadata[field] = std::to_string(newValue);
         tag->setYear(newValue);
         filePath.save();
+        std::cout<<"Successfully update the field "<<field<<" to "<<newValue<<std::endl;
         return;
     }
     std::cout<<"ERROR: Cannot find the field "<<field<<" to update, check again!\n";
