@@ -11,15 +11,18 @@
 class Metadata{
 protected:
     std::string mPath;
-    std::unordered_map<std::string, std::string> mMetadata;
+    std::unordered_map<std::string, std::string> mMetadata; //key: field and value is the inf of that field
+
 public:
-    Metadata(std::string);
+    Metadata(std::string);                          //pass the filePath into it and construct object
     virtual std::string getInf() const;
     std::string getName() const;
     std::string getPath() const;
     std::string getDuration() const;
-    void updateMetadata(std::string, std::string);
-    void updateMetadata(std::string, int);
+
+//update, change the value of field
+    void updateMetadata(std::string, std::string);  
+    void updateMetadata(std::string, int);          //key: field and value is year,...type of int
 };
 
 //class MetadataAudio for audio file

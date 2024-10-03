@@ -194,14 +194,14 @@ void PlayerMediaController::showTimeInRealTime(){
         std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
         if (mIsPlaying) { // Only display if still playing
             int playTime = getCurrentPlayTime();
-            std::cout   << "\rCurrent play time: " << formatTime(playTime) << "/" <<formatTime(mDuration)
-                        << "\t||\tEnter your option: "<<std::flush; // Overwrite the previous output
+            std::cout   << "\rCurrent play time: " << formatTime(playTime) << " / " <<formatTime(mDuration)
+                        << "   ||   Enter your option: "<<std::flush; // Overwrite the previous output
         }
     }
     if(!mIsPlaying){
         int playTime = getCurrentPlayTime();
-        std::cout   << "\rCurrent play time: " << formatTime(playTime) << "/" <<formatTime(mDuration)
-                    << "\t||\tEnter your option: "<<std::flush; // Overwrite the previous output
+        std::cout   << "\rCurrent play time: " << formatTime(playTime) << " / " <<formatTime(mDuration)
+                    << "   ||   Enter your option: "<<std::flush; // Overwrite the previous output
     }
 }
 

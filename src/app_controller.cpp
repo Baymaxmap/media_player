@@ -103,7 +103,6 @@ void AppController::browseMediaFiles(){
 void AppController::managePlaylist(){
     char inputPlaylistMenu;
     while(1){
-        ViewMedia::clearScreen();
         ViewMedia::showPlaylistMenu();
         std::cin>>inputPlaylistMenu;
         std::cin.ignore();
@@ -124,6 +123,7 @@ void AppController::managePlaylist(){
                 std::getline(std::cin, namePlaylist);
                 if(namePlaylist == "b"){break;}
                 mMediaManagementController.addPlaylist(namePlaylist);
+
                 break;
             }
     //case 3: manage editting playlist
@@ -137,7 +137,6 @@ void AppController::managePlaylist(){
                 if(mMediaManagementController.getPlaylist(namePlaylist)){
                     char intputEditPlaylist;
                     while(1){
-                        ViewMedia::clearScreen();
         //show edit playlist menu
                         ViewMedia::showEditPlaylistMenu(namePlaylist);
                         std::cin>>intputEditPlaylist;
@@ -330,12 +329,14 @@ void AppController::managePlayMusic(){
         //case '1': play all current media files
             case '1':
             {
+                ViewMedia::clearScreen();
                 mPlayerController.runListMediaFiles(mMediaManagementController.getListMediaFiles());
                 break;
             }
         //case '2': play a specific playlist by its name
             case '2':
             {
+                ViewMedia::clearScreen();
                 mMediaManagementController.showAllPlaylist();
                 std::cout<<"Enter EXACTLY the name of playlist that you want to play: ";
                 std::string namePlaylist;
@@ -344,11 +345,19 @@ void AppController::managePlayMusic(){
                     mPlayerController.runPlaylist(mMediaManagementController.getPlaylist(namePlaylist));
                 }
                 else{
-                    std::cout<<"NO found any playlist name "<<namePlaylist<<std::endl;
+                    std::cout<<"NOT found any playlist name "<<namePlaylist<<std::endl;
                 }
+                ViewMedia::clearScreen();
                 break;
             }
-            case '3':{break;}
+            case '3':{
+                ViewMedia::clearScreen();
+                break;
+            }
+            default:{
+                ViewMedia::showErrorInput();
+                break;
+            }
         }
         if(inputPlayOption == '3'){break;}
     }

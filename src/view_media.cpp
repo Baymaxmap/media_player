@@ -65,13 +65,13 @@ void ViewMedia::showBrowseMedia(MediaManagement& mediaManagement, char flag){
 
 //********************* PLAYLIST MENU ***********************/
 void ViewMedia::showPlaylistMenu(){
-    std::cout<<"\n\n=================== PLAYLIST ===================\n";
+    std::cout<<"\n\n============================== PLAYLIST ==============================\n";
     std::cout<<"1. View all Playlists\n";
     std::cout<<"2. Create a new Playlist\n";
     std::cout<<"3. Edit a playlist\n";
     std::cout<<"4. Delete a playlist\n";
     std::cout<<"5. Back to main menu";
-    std::cout<<"\n=================================================\n";
+    std::cout<<"\n=======================================================================\n";
     std::cout<<"Enter your choice: ";
 }
 
@@ -82,7 +82,7 @@ void ViewMedia::showEditPlaylistMenu(std::string namePlaylist){
     std::cout<<"3. View current media files in the playlist\n";
     std::cout<<"4. Rename the playlist\n";
     std::cout<<"5. Back to previous menu";
-    std::cout<<"\n=====================================================\n";
+    std::cout<<"\n===========================================================================\n";
     std::cout<<"Enter your choice: ";
 }
 
@@ -91,7 +91,7 @@ void ViewMedia::showFilesToAddPlaylist(std::vector<std::shared_ptr<MediaFile>>& 
     for(size_t i = 0; i<mediaFiles.size(); i++){
         std::cout<<i+1<<". "<<mediaFiles[i]->getNameMedia()<<std::endl;
     }
-    std::cout<<"\n==========================================================\n";
+    std::cout<<"\n==============================================================\n";
 }
 
 //********************* EDIT/VIEW METADATA OF FILE ***********************/
@@ -112,7 +112,7 @@ void ViewMedia::showPlayMusic(){
     std::cout<<"2. Play music from a specific playlist\n";
     std::cout<<"3. Back\n";
     std::cout<<"====================================================\n";
-    std::cout<<"Enter your otion: ";
+    std::cout<<"Enter your option: ";
 }
 
 void ViewMedia::showOptionPlayMusic(){
@@ -125,7 +125,7 @@ void ViewMedia::showOptionPlayMusic(){
     std::cout<<"6. Change volume\n";
     std::cout<<"7. Stop and exit\n";
     std::cout<<"====================================================\n";
-    std::cout<<"Enter your option: ";
+    std::cout<<"Current play time: 00:00 / 00:00   ||   Enter your option: ";
 }
 
 /************************************** OTHER FEATURES *****************************************/

@@ -14,13 +14,13 @@ class MediaFile{
     std::string mPath;
     std::shared_ptr<Metadata> mMetadata;
 public:
-    MediaFile(std::string);
+    MediaFile(std::string);                 //construct an object by passing file path
     std::string getInfMedia() const;
     std::string getPathMedia() const;
     std::string getNameMedia() const;
     std::string getDuration() const;
     
-    void updateMetadata(std::string, std::string);
+    void updateMetadata(std::string, std::string);  //key: field and value is year,...type of int
     void updateMetadata(std::string, int);
 };
 

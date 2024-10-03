@@ -78,6 +78,7 @@ void Metadata::updateMetadata(std::string field, std::string newValue){
     std::cout<<"ERROR: Cannot find the field "<<field<<" to update, check again!\n";
 }
 
+//update the inf of media file, but for "Year" field as in TagLib it is type of int
 void Metadata::updateMetadata(std::string field, int newValue){
     TagLib::FileRef filePath(mPath.c_str());
     TagLib::Tag* tag = filePath.tag();

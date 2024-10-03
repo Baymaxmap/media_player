@@ -10,7 +10,7 @@ void Playlist::addMediaFile(size_t index){
         return;
     }
     else{
-        mPlaylist.push_back(MediaManagement::mMediaManager[index]);
+        mPlaylist.push_back(MediaManagement::mMediaManager[index]); //access media file by index of vector stored in MediaMangement object
     }
 }
 
@@ -30,7 +30,7 @@ void Playlist::updateNamePlaylist(std::string newName){
     mName = newName;
 }
 
-//get all name of files in playlist
+//get all path of media files in playlist for the purpose of display inf of files in playlist
 std::string Playlist::getAllFilesInPlaylist() const{
     std::string allFiles = "";
     for(auto& it : mPlaylist){
@@ -39,7 +39,7 @@ std::string Playlist::getAllFilesInPlaylist() const{
     return allFiles;
 }
 
-//get all the path of media files in playlist, store in list
+//get all the path of media files in playlist, store in list => for the purpose of play music
 std::list<std::string> Playlist::getPathAllFiles(){
     std::list<std::string> pathAllFiles;
     for(auto& it : mPlaylist){
