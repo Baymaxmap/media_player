@@ -18,6 +18,16 @@ MediaManagement::MediaManagement(std::string folderPath) : mCurrentPage(0) {
     }
 }
 
+void MediaManagement::setMediaManager(std::string folderPath){
+    for(const auto& entry : std::filesystem::directory_iterator(folderPath)){
+        if(entry.is_regular_file() && entry.path().extension() == ".mp3"){
+            std::string filePath = entry.path().string();
+            mMediaManager.push_back(std::make_shared<MediaFile>(filePath));
+            mIndex++;
+        }
+    }
+}
+
 /************************************** MANAGE MEDIA FILES AND PLAYLIST INTO OBJECT *****************************************/
 //add a media file by its path
 void MediaManagement::addMediaFile(std::string filePath){
@@ -214,4 +224,18 @@ std::list<std::shared_ptr<MediaFile>> MediaManagement::getListMediaFiles(){
         listMediaFiles.push_back(it);
     }
     return listMediaFiles;
+}
+
+
+//get the current directory
+std::string MediaManagement::getCurrentDirectory(){
+    char currentPath[PATH_MAX];
+
+    // Lấy đường dẫn hiện tại và chuyển thành std::string
+    if (getcwd(currentPath, sizeof(currentPath)) != nullptr) {
+        return std::string(currentPath);
+    } else {
+        std::cerr << "Error getting current directory" << std::endl;
+        return "";
+    }
 }

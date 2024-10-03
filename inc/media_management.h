@@ -12,6 +12,8 @@ This folder is used to store all the media files in it, no matter where they are
 #include <iostream>
 #include <memory>
 #include <filesystem>
+#include <unistd.h>
+#include <limits.h>
 
 #include "media.h"
 #include "playlist.h"
@@ -32,7 +34,7 @@ class MediaManagement{
 public:
     MediaManagement();
     MediaManagement(std::string);
-
+    void setMediaManager(std::string);  //set the mMediaManager to store all media files in current directory
 /*************************** MANAGE VECTOR OF FILES AND MAP OF PLAYLIST *****************************/
 //get general Inf of media files and playlist
     std::string getAllMediaFiles() const;
@@ -63,6 +65,9 @@ public:
     std::vector<std::shared_ptr<MediaFile>>& getVectorMediaFile();  //return the vecotr mMediaManger
     //std::list<std::string> getListMediaFiles();                     //get all path of media files, store into a list
     std::list<std::shared_ptr<MediaFile>> getListMediaFiles();
+
+/*************************** GET THE CURRENT DIRECTORY *****************************/
+    std::string getCurrentDirectory(); //get the current directory that you open the terminal to run prog
 
 /************************************** UPDATE VIEW **************************************/
 //use View class to show Inf of all media files and playlists

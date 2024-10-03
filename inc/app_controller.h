@@ -1,6 +1,9 @@
 #ifndef APP_CONTROLLER_H
 #define APP_CONTROLLER_H
 
+#include <unistd.h>
+#include <limits.h>
+
 #include "media_management.h"
 #include "player_controller.h"
 #include "view_media.h"
@@ -24,6 +27,7 @@ public:
 //other features
     bool checkIsChar(const std::string&);
     bool checkIsNumber(const std::string&);
+    std::string getCurrentDirectory();      //get the current directory that you open the terminal to run prog
 };
 
 
