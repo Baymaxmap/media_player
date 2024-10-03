@@ -18,6 +18,8 @@ public:
     std::string getInfMedia() const;
     std::string getPathMedia() const;
     std::string getNameMedia() const;
+    std::string getDuration() const;
+    
     void updateMetadata(std::string, std::string);
     void updateMetadata(std::string, int);
 };

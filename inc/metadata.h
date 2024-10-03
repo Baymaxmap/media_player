@@ -17,6 +17,7 @@ public:
     virtual std::string getInf() const;
     std::string getName() const;
     std::string getPath() const;
+    std::string getDuration() const;
     void updateMetadata(std::string, std::string);
     void updateMetadata(std::string, int);
 };

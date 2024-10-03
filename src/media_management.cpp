@@ -208,10 +208,10 @@ std::vector<std::shared_ptr<MediaFile>>& MediaManagement::getVectorMediaFile(){
 }
 
 //get list of media files
-std::list<std::string> MediaManagement::getListMediaFiles(){
-    std::list<std::string> listMediaFiles;
+std::list<std::shared_ptr<MediaFile>> MediaManagement::getListMediaFiles(){
+    std::list<std::shared_ptr<MediaFile>> listMediaFiles;
     for(auto& it : mMediaManager){
-        listMediaFiles.push_back(it->getPathMedia());
+        listMediaFiles.push_back(it);
     }
     return listMediaFiles;
 }

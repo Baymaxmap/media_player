@@ -22,6 +22,9 @@ std::string MediaFile::getPathMedia() const{
 std::string MediaFile::getNameMedia() const{
     return mMetadata->getName();
 }
+std::string MediaFile::getDuration() const{
+    return (mMetadata->getDuration());
+}
 
 //update data from user
 void MediaFile::updateMetadata(std::string field, std::string newValue){

@@ -14,6 +14,7 @@ void ViewMedia::showMediaInf(std::string infMedia){
 void ViewMedia::showMediaInfInFolder(std::string infMediaInFolder){
     std::cout<<"\n\n======== INF of media files in the folder: ========\n";
     std::cout<<infMediaInFolder<<std::endl;
+    std::cout<<"=====================================================\n";
 }
 
 //View playlist
@@ -27,6 +28,7 @@ void ViewMedia::showAllPlaylist(std::string infPlaylist){
 void ViewMedia::showFilesInPlaylist(std::string filesInPlaylist){
     std::cout<<"\n\n======== INF of all media files in playlist ========\n";
     std::cout<<filesInPlaylist<<std::endl;
+    std::cout<<"==========================================================\n";
 }
 
 //view media files per page

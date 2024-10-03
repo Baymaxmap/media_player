@@ -61,7 +61,8 @@ public:
 /*************************** RETURN VECTOR AND POINTER *****************************/
     std::shared_ptr<Playlist> getPlaylist(const std::string&);      //return a smart pointer Playlist by its name
     std::vector<std::shared_ptr<MediaFile>>& getVectorMediaFile();  //return the vecotr mMediaManger
-    std::list<std::string> getListMediaFiles();                     //get all path of media files, store into a list
+    //std::list<std::string> getListMediaFiles();                     //get all path of media files, store into a list
+    std::list<std::shared_ptr<MediaFile>> getListMediaFiles();
 
 /************************************** UPDATE VIEW **************************************/
 //use View class to show Inf of all media files and playlists

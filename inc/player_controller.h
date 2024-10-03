@@ -11,6 +11,7 @@
 #include <SDL2/SDL_mixer.h>
 
 #include "playlist.h"
+#include "media.h"
 
 class PlayerMediaController{
     static PlayerMediaController* sControllerInstance;
@@ -23,6 +24,7 @@ class PlayerMediaController{
 
 //handling display current time when playing music
     int mTimePaused;
+    int mDuration;
     std::chrono::time_point<std::chrono::steady_clock> mStartTime;
 
 public:
@@ -40,7 +42,7 @@ public:
     void previousTrackInPlaylist();
 
     void runPlaylist(std::shared_ptr<Playlist>);
-    void runListMediaFiles(std::list<std::string>);
+    void runListMediaFiles(std::list<std::shared_ptr<MediaFile>>);
 
 //manage display current time when playing music
     int getCurrentPlayTime();

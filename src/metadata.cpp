@@ -44,6 +44,15 @@ std::string Metadata::getPath() const{
     return mPath;
 }
 
+//get the duration
+std::string Metadata::getDuration() const{
+    auto it = mMetadata.find("Duration");
+    if(it != mMetadata.end()){
+        return it->second;
+    }
+    return "";
+}
+
 //update inf of media file
 void Metadata::updateMetadata(std::string field, std::string newValue){
     TagLib::FileRef filePath(mPath.c_str());

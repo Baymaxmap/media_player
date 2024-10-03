@@ -49,9 +49,10 @@ void PlayerMediaController::play(std::string filePath){
         mStartTime = std::chrono::steady_clock::now(); // Start timing
         mIsPlaying = true;
         mTimePaused = 0;
+        std::shared_ptr<MediaFile> mediaFile = std::make_shared<MediaFile>(filePath);
+        mDuration = std::stoi(mediaFile->getDuration());
         std::cout<<"Playing "<<filePath<<std::endl;
     }
-
 }
 
 //pause the media file
@@ -161,13 +162,13 @@ void PlayerMediaController::showTimeInRealTime(){
         std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
         if (mIsPlaying) { // Only display if still playing
             int playTime = getCurrentPlayTime();
-            std::cout   << "\rCurrent play time: " << formatTime(playTime) 
+            std::cout   << "\rCurrent play time: " << formatTime(playTime) << "/" <<formatTime(mDuration)
                         << "\t||\tEnter your option: "<<std::flush; // Overwrite the previous output
         }
     }
     if(!mIsPlaying){
         int playTime = getCurrentPlayTime();
-        std::cout   << "\rCurrent play time: " << formatTime(playTime) 
+        std::cout   << "\rCurrent play time: " << formatTime(playTime) << "/" <<formatTime(mDuration)
                     << "\t||\tEnter your option: "<<std::flush; // Overwrite the previous output
     }
 }
@@ -238,7 +239,7 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
                 end();
                 break;
             }
-            default:{std::cout<<"not valid input\n"; break;}
+            default:{ViewMedia::showErrorInput(); break;}
         }
         if(i=='6'){
             break;
@@ -249,13 +250,17 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
 
 
 //implement running all media files
-void PlayerMediaController::runListMediaFiles(std::list<std::string> listMediaFiles){
+void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFile>> listMediaFiles){
     init();
     mIsPlaying =false;
     //call static function to call a non static function
     Mix_HookMusicFinished(musicEndedPlaylistStatic);
 
-    mListToPlay = listMediaFiles;
+    std::list<std::string> tempList;
+    for(auto& it : listMediaFiles){
+        tempList.push_back(it->getPathMedia());
+    }
+    mListToPlay = tempList;
     mCurrentTrack = mListToPlay.begin();
 
     while(1){
@@ -316,9 +321,10 @@ void PlayerMediaController::runListMediaFiles(std::list<std::string> listMediaFi
                 end();
                 break;
             }
-            default:{std::cout<<"not valid input\n"; break;}
+            default:{ViewMedia::showErrorInput(); break;}
         }
         if(i=='6'){
+            std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
             break;
         }
     }
