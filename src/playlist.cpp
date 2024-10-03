@@ -34,7 +34,7 @@ void Playlist::updateNamePlaylist(std::string newName){
 std::string Playlist::getAllFilesInPlaylist() const{
     std::string allFiles = "";
     for(auto& it : mPlaylist){
-        allFiles += it.lock()->getNameMedia() + "\n";
+        allFiles += it.lock()->getPathMedia() + "\n";
     }
     return allFiles;
 }

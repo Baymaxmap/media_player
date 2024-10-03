@@ -29,7 +29,9 @@ std::string MediaFile::getDuration() const{
 //update data from user
 void MediaFile::updateMetadata(std::string field, std::string newValue){
     mMetadata->updateMetadata(field, newValue);
+    std::cout<<"Update successfully!!!\n";
 }
 void MediaFile::updateMetadata(std::string field, int newValue){
     mMetadata->updateMetadata(field, newValue);
+    std::cout<<"Update successfully!!!\n";
 }

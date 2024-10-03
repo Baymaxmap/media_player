@@ -1,7 +1,7 @@
 #include "player_controller.h"
 PlayerMediaController* PlayerMediaController::sControllerInstance = nullptr;
 
-PlayerMediaController::PlayerMediaController() : mIsPlaying(false), mTimePaused(0){
+PlayerMediaController::PlayerMediaController() : mIsPlaying(false), mTimePaused(0), mVolume(50){
     mMusic = nullptr;
     sControllerInstance = this;
 }
@@ -112,6 +112,38 @@ void PlayerMediaController::previousTrackInPlaylist(){
     play(*mCurrentTrack);
 }
 
+//*********************************** MANAGE CHANGE VOLUME ***********************************/
+//canonical: line mode => terminal just handles data only when user press enter
+//echo: enable display character input on terminal
+
+void PlayerMediaController::setNonCanonicalMode(bool enable){
+    tcgetattr(STDIN_FILENO, &mTty); // get and store the current terminal configuration
+
+    if (enable) {
+        mTty.c_lflag &= ~(ICANON | ECHO); // turn off canonical and echo
+    } else {
+        mTty.c_lflag |= (ICANON | ECHO); // turn on canonical and echo
+    }
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &mTty); // update configuration
+}
+
+//increase volume
+void PlayerMediaController::increaseVolume(){
+    mVolume += 10;
+    if(mVolume<0) mVolume = 0;
+    if(mVolume>128) mVolume = 128;
+    Mix_VolumeMusic(mVolume);
+}
+
+//decrease volume
+void PlayerMediaController::decreaseVolume(){
+    mVolume -= 10;
+    if(mVolume<0) mVolume = 0;
+    if(mVolume>128) mVolume = 128;
+    Mix_VolumeMusic(mVolume);
+}
+
 //*********************************** MANAGE AUTO PLAY NEXT WHEN A SONG ENDED ***********************************/
 //function when end a media file
 void PlayerMediaController::musicEndedPlaylistStatic(){
@@ -173,6 +205,7 @@ void PlayerMediaController::showTimeInRealTime(){
     }
 }
 
+//*********************************** MANAGE RUN PLAYLIST AND RUN ALL MEDIA FILES ***********************************/
 //implement run playlist
 void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
     init();
@@ -184,11 +217,13 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
     mCurrentTrack = mListToPlay.begin();
 
     while(1){
+        setNonCanonicalMode(0); //turn on canonical and echo
         char i;
         ViewMedia::showOptionPlayMusic();
         std::cin>>i;
         switch(i){
             case '1':{
+                ViewMedia::clearScreen();
                 if(!mIsPlaying){
                     play(*mCurrentTrack);
                     std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
@@ -200,6 +235,7 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
                 break;
             }
             case '2':{
+                ViewMedia::clearScreen();
                 if(mIsPlaying){
                     pause();
                 }
@@ -209,6 +245,7 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
                 break;
             }
             case '3':{
+                ViewMedia::clearScreen();
                 if(!mIsPlaying){
                     resume();
                     std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
@@ -221,6 +258,7 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
             }
             case '4':
             {
+                ViewMedia::clearScreen();
                 nextTrackInPlaylist();
                 std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
                 playMusic.detach();
@@ -228,6 +266,7 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
             }
             case '5':
             {
+                ViewMedia::clearScreen();
                 previousTrackInPlaylist();
                 std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
                 playMusic.detach();
@@ -235,24 +274,48 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
             }
             case '6':
             {
+                ViewMedia::clearScreen();
+                setNonCanonicalMode(1);
+                std::cout << "1. (+) volume\n";
+                std::cout << "2. (-) volume\n";
+                std::cout << "3. Back\n";
+                while(1){
+                    char inputVolume;
+                    std::cin>>inputVolume;
+                    switch(inputVolume){
+                        case '1': {increaseVolume(); break;}
+                        case '2': {decreaseVolume(); break;}
+                        case '3': {
+                            ViewMedia::clearScreen();
+                            break;
+                        }
+                        default: {ViewMedia::showErrorInput(); break;}
+                    }
+                    if(inputVolume == '3'){break;}
+                }
+                break;
+            }
+            case '7':
+            {
                 std::cout<<"Stop playing music!!!\n";
                 end();
                 break;
             }
             default:{ViewMedia::showErrorInput(); break;}
         }
-        if(i=='6'){
+        if(i=='7'){
+            std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+            ViewMedia::clearScreen();
             break;
         }
     }
 }
 
 
-
 //implement running all media files
 void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFile>> listMediaFiles){
+    mIsPlaying = false;
     init();
-    mIsPlaying =false;
     //call static function to call a non static function
     Mix_HookMusicFinished(musicEndedPlaylistStatic);
 
@@ -264,11 +327,13 @@ void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFil
     mCurrentTrack = mListToPlay.begin();
 
     while(1){
+        setNonCanonicalMode(0); //turn on canonical and echo
         char i;
         ViewMedia::showOptionPlayMusic();
         std::cin>>i;
         switch(i){
             case '1':{
+                ViewMedia::clearScreen();
                 if(!mIsPlaying){
                     play(*mCurrentTrack);
 
@@ -282,6 +347,7 @@ void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFil
                 break;
             }
             case '2':{
+                ViewMedia::clearScreen();
                 if(mIsPlaying){
                     pause();
                 }
@@ -291,6 +357,7 @@ void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFil
                 break;
             }
             case '3':{
+                ViewMedia::clearScreen();
                 if(!mIsPlaying){
                     resume();
                     std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
@@ -303,6 +370,7 @@ void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFil
             }
             case '4':
             {
+                ViewMedia::clearScreen();
                 nextTrackInPlaylist();
                 std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
                 playMusic.detach();
@@ -310,6 +378,7 @@ void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFil
             }
             case '5':
             {
+                ViewMedia::clearScreen();
                 previousTrackInPlaylist();
                 std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
                 playMusic.detach();
@@ -317,14 +386,38 @@ void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFil
             }
             case '6':
             {
-                std::cout<<"Stop playing music\n";
+                ViewMedia::clearScreen();
+                setNonCanonicalMode(1);
+                std::cout << "1. (+) volume\n";
+                std::cout << "2. (-) volume\n";
+                std::cout << "3. Back\n";
+                while(1){
+                    char inputVolume;
+                    std::cin>>inputVolume;
+                    switch(inputVolume){
+                        case '1': {increaseVolume(); break;}
+                        case '2': {decreaseVolume(); break;}
+                        case '3': {
+                            ViewMedia::clearScreen();
+                            break;
+                        }
+                        default: {ViewMedia::showErrorInput(); break;}
+                    }
+                    if(inputVolume == '3'){break;}
+                }
+                break;
+            }
+            case '7':
+            {
+                std::cout<<"Stop playing music!!!\n";
                 end();
                 break;
             }
             default:{ViewMedia::showErrorInput(); break;}
         }
-        if(i=='6'){
+        if(i=='7'){
             std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+            ViewMedia::clearScreen();
             break;
         }
     }

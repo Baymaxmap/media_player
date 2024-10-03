@@ -8,19 +8,21 @@ std::map<std::string, std::shared_ptr<Playlist>> MediaManagement::mPlaylistManag
 MediaManagement::MediaManagement() : mCurrentPage(0){}
 
 //constructor that take in the folder path to traverse the folder and add all MediaFile objects to unordered_map
-MediaManagement::MediaManagement(std::string folderPath) : mCurrentPage(0) {
-    for(const auto& entry : std::filesystem::directory_iterator(folderPath)){
-        if(entry.is_regular_file() && entry.path().extension() == ".mp3"){
-            std::string filePath = entry.path().string();
-            mMediaManager.push_back(std::make_shared<MediaFile>(filePath));
-            mIndex++;
-        }
-    }
-}
+// MediaManagement::MediaManagement(std::string folderPath) : mCurrentPage(0) {
+//     for(const auto& entry : std::filesystem::directory_iterator(folderPath)){
+//         if(entry.is_regular_file() && entry.path().extension() == ".mp3"){
+//             std::string filePath = entry.path().string();
+//             mMediaManager.push_back(std::make_shared<MediaFile>(filePath));
+//             mIndex++;
+//         }
+//     }
+// }
 
-void MediaManagement::setMediaManager(std::string folderPath){
-    for(const auto& entry : std::filesystem::directory_iterator(folderPath)){
-        if(entry.is_regular_file() && entry.path().extension() == ".mp3"){
+void MediaManagement::setMediaManager(std::string folderPath) {
+    // use recursive_directory_iterator traverse all sub-folder
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(folderPath)) {
+        // check if the file has extension .mp3
+        if (entry.is_regular_file() && entry.path().extension() == ".mp3") {
             std::string filePath = entry.path().string();
             mMediaManager.push_back(std::make_shared<MediaFile>(filePath));
             mIndex++;
@@ -58,6 +60,9 @@ void MediaManagement::deletePlaylist(std::string namePlaylist){
 /************************************** GET GENERAL INF OF MEDIA, PLAYLIST *****************************************/
 //get all name of playlists
 std::string MediaManagement::getAllPlaylistName() const{
+    if(mPlaylistManager.empty()){
+        return "NO playlist found!!!\n";
+    }
     std::string infPlaylist = "";
     for(auto& it : mPlaylistManager){
         infPlaylist += it.first + "\n";

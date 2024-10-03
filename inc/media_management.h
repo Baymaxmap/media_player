@@ -35,6 +35,7 @@ public:
     MediaManagement();
     MediaManagement(std::string);
     void setMediaManager(std::string);  //set the mMediaManager to store all media files in current directory
+    
 /*************************** MANAGE VECTOR OF FILES AND MAP OF PLAYLIST *****************************/
 //get general Inf of media files and playlist
     std::string getAllMediaFiles() const;

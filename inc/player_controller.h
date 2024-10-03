@@ -7,6 +7,9 @@
 #include <memory>
 #include <thread>
 #include <chrono>
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
@@ -26,6 +29,10 @@ class PlayerMediaController{
     int mTimePaused;
     int mDuration;
     std::chrono::time_point<std::chrono::steady_clock> mStartTime;
+
+//handling change volume
+    int mVolume;
+    struct termios mTty;
 
 public:
     PlayerMediaController();
@@ -48,6 +55,11 @@ public:
     int getCurrentPlayTime();
     std::string formatTime(int);    // format time in mm:ss format
     void showTimeInRealTime();
+
+//manage change volume
+    void setNonCanonicalMode(bool = true);  // turn on/off canonical
+    void increaseVolume();
+    void decreaseVolume();
 };
 
 #endif

@@ -34,7 +34,7 @@ void ViewMedia::showFilesInPlaylist(std::string filesInPlaylist){
 //view media files per page
 void ViewMedia::showMediaInfPerPage(std::vector<std::shared_ptr<MediaFile>>& mediaFiles, size_t start, size_t end){
     for(size_t i = start; i<end; i++){
-        std::cout<<i<<". "<<mediaFiles[i]->getNameMedia()<<"\n";
+        std::cout<<i<<". "<<mediaFiles[i]->getPathMedia()<<"\n";
     }
 }
 
@@ -58,9 +58,9 @@ void ViewMedia::showBrowseMedia(MediaManagement& mediaManagement, char flag){
     if(flag == 'c'){mediaManagement.showCurrentPage();}
     if(flag == 'n'){mediaManagement.showNextPage();}
     if(flag == 'p'){mediaManagement.showPreviousPage();}
-    std::cout<<"[Next page] (press n)       [Previous page] (press p)\n";
+    std::cout<<"[Next page] (press n)       [Previous page] (press p)       [Back] (press b)\n";
     std::cout<<"==========================================================\n";
-    std::cout<<"Enter the number to play, or press (b) to back to main menu: ";
+    std::cout<<"Enter option: ";
 }
 
 //********************* PLAYLIST MENU ***********************/
@@ -122,7 +122,8 @@ void ViewMedia::showOptionPlayMusic(){
     std::cout<<"3. Resume\n";
     std::cout<<"4. Next Track\n";
     std::cout<<"5. Previous Track\n";
-    std::cout<<"6. Stop and exit\n";
+    std::cout<<"6. Change volume\n";
+    std::cout<<"7. Stop and exit\n";
     std::cout<<"====================================================\n";
     std::cout<<"Enter your option: ";
 }
@@ -130,4 +131,7 @@ void ViewMedia::showOptionPlayMusic(){
 /************************************** OTHER FEATURES *****************************************/
 void ViewMedia::showErrorInput(){
     std::cout<<"**ERROR: invalid input, check again!!!\n";
+}
+void ViewMedia::clearScreen() {
+    std::cout << "\033[2J\033[1;1H";  // escape ANSI to clear screen and point the pointer to initial
 }

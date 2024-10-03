@@ -45,6 +45,7 @@ public:
     static void showOptionPlayMusic();
 //other feature
     static void showErrorInput();
+    static void clearScreen();
 };
 
 #endif

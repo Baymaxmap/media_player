@@ -7,6 +7,7 @@ AppController::AppController(MediaManagement& mediaManagement, PlayerMediaContro
 void AppController::run(){
 //show the main menu
     while(true){
+        ViewMedia::clearScreen();
         ViewMedia::showAppMainMenu();
         char inputMenu;
         std::cin>>inputMenu;
@@ -14,30 +15,35 @@ void AppController::run(){
         switch(inputMenu){
             case '1':
             {
+                ViewMedia::clearScreen();
                 browseMediaFiles();
                 break;
             }
             case '2':
             {
+                ViewMedia::clearScreen();
                 managePlaylist();
                 break;
             }
             case '3':
             {
+                ViewMedia::clearScreen();
                 manageMediaFile();
                 break;
             }
             case '4':
             {
+                ViewMedia::clearScreen();
                 managePlayMusic();
                 break;
             }
             case '5':
             {
+                ViewMedia::clearScreen();
                 break;
             }
             default:{
-                std::cout<<"**EROOR: invalid input\n";
+                ViewMedia::showErrorInput();
                 break;
             }
         }
@@ -47,6 +53,7 @@ void AppController::run(){
 
 /************************************** BROWSE MEDIA FILES *****************************************/
 void AppController::browseMediaFiles(){
+    ViewMedia::clearScreen();
     ViewMedia::showBrowseMedia(mMediaManagementController);
     while(1){
         std::string inputBrosweFile;
@@ -58,14 +65,17 @@ void AppController::browseMediaFiles(){
             inputChar = inputBrosweFile[0];
             switch(inputChar){
                 case 'n':{
+                    ViewMedia::clearScreen();
                     ViewMedia::showBrowseMedia(mMediaManagementController, inputChar);
                     break;
                 }
                 case 'p':{
+                    ViewMedia::clearScreen();
                     ViewMedia::showBrowseMedia(mMediaManagementController, inputChar);
                     break;
                 }
                 case 'b':{
+                    ViewMedia::clearScreen();
                     break;
                 }
             }
@@ -82,7 +92,7 @@ void AppController::browseMediaFiles(){
                 }
             }
             else{
-                std::cout<<"**ERROR: invalid input\n";
+                ViewMedia::showErrorInput();
                 std::cout<<"Enter the number to play, or press (b) to back to main menu: ";
             }
         }
@@ -91,44 +101,52 @@ void AppController::browseMediaFiles(){
 
 /************************************** MANAGE PLAYLIST *****************************************/
 void AppController::managePlaylist(){
-    int inputPlaylistMenu;
+    char inputPlaylistMenu;
     while(1){
+        ViewMedia::clearScreen();
         ViewMedia::showPlaylistMenu();
         std::cin>>inputPlaylistMenu;
         std::cin.ignore();
         switch(inputPlaylistMenu){
     //case 1: view all playlist
-            case 1:
+            case '1':
             {
+                ViewMedia::clearScreen();
                 mMediaManagementController.showAllPlaylist();
                 break;
             }
     //case 2: add a new playlist
-            case 2:
+            case '2':
             {
+                ViewMedia::clearScreen();
                 std::string namePlaylist;
-                std::cout<<"Enter the name of playlist: ";
+                std::cout<<"Enter the name of playlist (or press b to back): ";
                 std::getline(std::cin, namePlaylist);
+                if(namePlaylist == "b"){break;}
                 mMediaManagementController.addPlaylist(namePlaylist);
                 break;
             }
     //case 3: manage editting playlist
-            case 3:
+            case '3':
             {
+                ViewMedia::clearScreen();
                 std::string namePlaylist;
+                mMediaManagementController.showAllPlaylist();   //show all playlist to choose
                 std::cout<<"Enter the name of playlist that you want to edit: ";
                 std::getline(std::cin, namePlaylist);
                 if(mMediaManagementController.getPlaylist(namePlaylist)){
-                    int intputEditPlaylist;
+                    char intputEditPlaylist;
                     while(1){
+                        ViewMedia::clearScreen();
         //show edit playlist menu
                         ViewMedia::showEditPlaylistMenu(namePlaylist);
                         std::cin>>intputEditPlaylist;
                         std::cin.ignore();
                         switch(intputEditPlaylist){
         //case 3.1: add files into playlist
-                            case 1:
+                            case '1':
                             {
+                                ViewMedia::clearScreen();
                                 ViewMedia::showFilesToAddPlaylist(mMediaManagementController.getVectorMediaFile());
                                 int numFile;
                 //enter number of file to add to playlist
@@ -140,26 +158,32 @@ void AppController::managePlaylist(){
                                         mMediaManagementController.addFileToPlaylist(namePlaylist, numFile-1);
                                     }
                                 }
+                                ViewMedia::clearScreen();
                                 break;
                             }
         //case 3.2: remove a file from playlist
-                            case 2:
+                            case '2':
                             {
+                                ViewMedia::clearScreen();
+                                mMediaManagementController.showAllFilesInPlaylist(namePlaylist);
                                 std::string filePath;
-                                std::cout<<"Enter the path of media file that you want to remove: ";
+                                std::cout<<"Enter the path of media file that you want to remove (or press b to back): ";
                                 std::getline(std::cin, filePath);
+                                if(filePath == "b"){break;}
                                 mMediaManagementController.deleteFileInPlaylist(namePlaylist, filePath);
                                 break;
                             }
         //case 3.3: view all media files in playlist
-                            case 3:
+                            case '3':
                             {
+                                ViewMedia::clearScreen();
                                 mMediaManagementController.showAllFilesInPlaylist(namePlaylist);
                                 break;
                             }
         //case 3.4: rename the playlist
-                            case 4:
+                            case '4':
                             {
+                                ViewMedia::clearScreen();
                                 std::string newName;
                                 std::cout<<"Enter the new name for playlist: ";
                                 std::getline(std::cin, newName);
@@ -167,45 +191,51 @@ void AppController::managePlaylist(){
                                 break;
                             }
         //case 3.5: back to menu of playlist
-                            case 5:
+                            case '5':
                             {
+                                ViewMedia::clearScreen();
                                 break;
                             }
                             default:
                             {
-                                std::cout<<"**ERROR: invalid input\n";
+                                ViewMedia::showErrorInput();
                                 break;
                             }
                         }
-                        if(intputEditPlaylist==5){break;}
+                        if(intputEditPlaylist=='5'){break;}
                     }
                 }
                 else{
+                    ViewMedia::clearScreen();
                     std::cout<<"**ERROR: invaild name of playlist\n";
                 }
                 break;
             }
     //case 4: delete a playlist
-            case 4:
+            case '4':
             {
+                ViewMedia::clearScreen();
+                mMediaManagementController.showAllPlaylist();
                 std::string deletePlaylist;
-                std::cout<<"Enter the name of playlist you want to remove: ";
+                std::cout<<"Enter the name of playlist you want to remove (or press b to back): ";
                 std::getline(std::cin, deletePlaylist);
+                if(deletePlaylist == "b"){break;}
                 mMediaManagementController.deletePlaylist(deletePlaylist);
                 break;
             }
     //case 5: back to main menu
-            case 5:
+            case '5':
             {
+                ViewMedia::clearScreen();
                 break;
             }
             default:
             {
-                std::cout<<"**ERROR: invalid input\n";
+                ViewMedia::showErrorInput();
                 break;
             }
         }
-        if(inputPlaylistMenu == 5){break;}
+        if(inputPlaylistMenu == '5'){break;}
     }
 }
 
@@ -214,8 +244,9 @@ void AppController::manageMediaFile(){
     char inputChar = 'c';
     int inputNum;
     while(1){
+        ViewMedia::clearScreen();
         std::string inputMetadata;
-        ViewMedia::showEditViewMetadata(mMediaManagementController, inputChar);
+        ViewMedia::showEditViewMetadata(mMediaManagementController, inputChar); //show edit metadata menu
         std::getline(std::cin, inputMetadata);
         
     //input is a char
@@ -231,38 +262,43 @@ void AppController::manageMediaFile(){
     //input is a number
         else{
             if(checkIsNumber(inputMetadata)){
+                ViewMedia::clearScreen();
                 inputNum = std::stoi(inputMetadata);
                 mMediaManagementController.showInfMediaFile((size_t)inputNum);  //show inf of media file chosen
                 std::cout<<"Do you want to edit this file [y/n]: ";
                 char inputOption;
                 std::cin>>inputOption;
                 std::cin.ignore();
-                switch(inputOption){
                 
+                switch(inputOption){
                 //user want to edit the metadata of that file chosen
                     case 'y':
                     {
-                        std::string field;
-                        std::cout<<"Enter EXACTLY the field that you want to change: ";
-                        std::getline(std::cin, field);
-                        
-                        std::cout<<"Enter the new value that you want to subtitute: ";
-                        std::string newValue;
-                        std::getline(std::cin, newValue);
+                        while(1){
+                            std::string field;
+                            std::cout<<"Enter EXACTLY the field that you want to change (or press b to back): ";
+                            std::getline(std::cin, field);
+                            if(field == "b"){break;}
 
-                        //update new value for metadata of media file
-                        if(checkIsNumber(newValue)){
-                            int value = std::stoi(newValue);
-                            mMediaManagementController.updateMediaFile((size_t)inputNum, field, value);
-                        }
-                        else{
-                            mMediaManagementController.updateMediaFile((size_t)inputNum, field, newValue);
+                            std::cout<<"Enter the new value that you want to subtitute: ";
+                            std::string newValue;
+                            std::getline(std::cin, newValue);
+
+                            //update new value for metadata of media file
+                            if(checkIsNumber(newValue)){
+                                int value = std::stoi(newValue);
+                                mMediaManagementController.updateMediaFile((size_t)inputNum, field, value);
+                            }
+                            else{
+                                mMediaManagementController.updateMediaFile((size_t)inputNum, field, newValue);
+                            }
                         }
                         break;
                     }
                 //user do not want to edit the metadata of that file chosen
                     case 'n':
                     {
+                        ViewMedia::clearScreen();
                         break;
                     }
                     default:{
