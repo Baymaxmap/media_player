@@ -88,12 +88,12 @@ void AppController::browseMediaFiles(){
                 if((size_t)numPlay >= 0 || (size_t)numPlay < (mMediaManagementController.getVectorMediaFile()).size() ){
                     std::string filePlay = mMediaManagementController.getVectorMediaFile()[(size_t)numPlay]->getPathMedia();
                     mPlayerController.play(filePlay);
-                    std::cout<<"Enter the number to play, or press (b) to back to main menu: ";
+                    std::cout<<"Enter option: ";
                 }
             }
             else{
                 ViewMedia::showErrorInput();
-                std::cout<<"Enter the number to play, or press (b) to back to main menu: ";
+                std::cout<<"Enter option ";
             }
         }
     }
@@ -146,18 +146,35 @@ void AppController::managePlaylist(){
                             case '1':
                             {
                                 ViewMedia::clearScreen();
-                                ViewMedia::showFilesToAddPlaylist(mMediaManagementController.getVectorMediaFile());
+                                std::string inputAddFiles;
                                 int numFile;
-                //enter number of file to add to playlist
+                                char flagPage = 'c';
                                 while(1){
-                                    std::cout<<"Choose file to add (or enter 0 to back): ";
-                                    std::cin>>numFile;
-                                    if(numFile==0){break;}
-                                    else{
-                                        mMediaManagementController.addFileToPlaylist(namePlaylist, numFile-1);
+                                    ViewMedia::showFilesToAddPlaylist(mMediaManagementController, flagPage);
+                                    while(1){
+                                        std::cout<<"Choose file to add (or enter 0 to back): ";
+                                        std::getline(std::cin, inputAddFiles);
+                                        if(inputAddFiles == "0"){break;}
+                                        if(checkIsChar(inputAddFiles)){
+                                            flagPage = inputAddFiles[0];
+                                            ViewMedia::clearScreen();
+                                            ViewMedia::showFilesToAddPlaylist(mMediaManagementController, flagPage);
+                                        }
+                                        else{
+                                            if(checkIsNumber(inputAddFiles)){
+                                                numFile = std::stoi(inputAddFiles);
+                                                mMediaManagementController.addFileToPlaylist(namePlaylist, numFile-1);
+                                            }
+                                            else{
+                                                ViewMedia::showErrorInput();
+                                            }
+                                        }
+                                    }
+                                    if(inputAddFiles == "0"){
+                                        ViewMedia::clearScreen();
+                                        break;
                                     }
                                 }
-                                ViewMedia::clearScreen();
                                 break;
                             }
         //case 3.2: remove a file from playlist
@@ -243,7 +260,6 @@ void AppController::manageMediaFile(){
     char inputChar = 'c';
     int inputNum;
     while(1){
-        ViewMedia::clearScreen();
         std::string inputMetadata;
         ViewMedia::showEditViewMetadata(mMediaManagementController, inputChar); //show edit metadata menu
         std::getline(std::cin, inputMetadata);
@@ -251,10 +267,20 @@ void AppController::manageMediaFile(){
     //input is a char
         if(checkIsChar(inputMetadata)){
             inputChar = inputMetadata[0];
-            if(inputChar == 'b'){break;}
-            if(inputChar != 'n' && inputChar != 'p'){
-                ViewMedia::showErrorInput();
-                inputChar = 'c';
+            if(inputChar == 'b'){
+                ViewMedia::clearScreen();
+                break;
+            }
+            else {
+                if(inputChar != 'n' && inputChar != 'p'){
+                    ViewMedia::clearScreen();
+                    ViewMedia::showErrorInput();
+                    inputChar = 'c';
+                }
+
+                else{
+                    ViewMedia::clearScreen();
+                }
             }
         }
 
@@ -263,7 +289,7 @@ void AppController::manageMediaFile(){
             if(checkIsNumber(inputMetadata)){
                 ViewMedia::clearScreen();
                 inputNum = std::stoi(inputMetadata);
-                mMediaManagementController.showInfMediaFile((size_t)inputNum);  //show inf of media file chosen
+                mMediaManagementController.showInfMediaFile((size_t)(inputNum-1));  //show inf of media file chosen
                 std::cout<<"Do you want to edit this file [y/n]: ";
                 char inputOption;
                 std::cin>>inputOption;
@@ -286,10 +312,10 @@ void AppController::manageMediaFile(){
                             //update new value for metadata of media file
                             if(checkIsNumber(newValue)){
                                 int value = std::stoi(newValue);
-                                mMediaManagementController.updateMediaFile((size_t)inputNum, field, value);
+                                mMediaManagementController.updateMediaFile((size_t)(inputNum-1), field, value);
                             }
                             else{
-                                mMediaManagementController.updateMediaFile((size_t)inputNum, field, newValue);
+                                mMediaManagementController.updateMediaFile((size_t)(inputNum-1), field, newValue);
                             }
                         }
                         break;
@@ -338,9 +364,13 @@ void AppController::managePlayMusic(){
             {
                 ViewMedia::clearScreen();
                 mMediaManagementController.showAllPlaylist();
-                std::cout<<"Enter EXACTLY the name of playlist that you want to play: ";
+                std::cout<<"Enter EXACTLY the name of playlist that you want to play (or press b to back): ";
                 std::string namePlaylist;
                 std::getline(std::cin, namePlaylist);
+                if(namePlaylist == "b"){
+                    ViewMedia::clearScreen();
+                    break;
+                }
                 if(mMediaManagementController.getPlaylist(namePlaylist)){
                     mPlayerController.runPlaylist(mMediaManagementController.getPlaylist(namePlaylist));
                 }

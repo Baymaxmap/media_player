@@ -34,9 +34,10 @@ void ViewMedia::showFilesInPlaylist(std::string filesInPlaylist){
 }
 
 //view media files per page
-void ViewMedia::showMediaInfPerPage(std::vector<std::shared_ptr<MediaFile>>& mediaFiles, size_t start, size_t end){
+void ViewMedia::showMediaInfPerPage(std::vector<std::shared_ptr<MediaFile>>& mediaFiles, size_t currenPage, size_t start, size_t end){
+    std::cout<<"Page "<<(currenPage+1)<<"/"<<(mediaFiles.size()/ITEMS_PER_PAGE)+1<<"\n\n";
     for(size_t i = start; i<end; i++){
-        std::cout<<i<<". "<<mediaFiles[i]->getPathMedia()<<"\n";
+        std::cout<<i+1<<". "<<mediaFiles[i]->getPathMedia()<<"\n";
     }
 }
 
@@ -88,11 +89,12 @@ void ViewMedia::showEditPlaylistMenu(std::string namePlaylist){
     std::cout<<"Enter your choice: ";
 }
 
-void ViewMedia::showFilesToAddPlaylist(std::vector<std::shared_ptr<MediaFile>>& mediaFiles){
+void ViewMedia::showFilesToAddPlaylist(MediaManagement& mediaManagement, char flag){
     std::cout<<"\n=================== ADD FILE INTO PLAYLIST ===================\n";
-    for(size_t i = 0; i<mediaFiles.size(); i++){
-        std::cout<<i+1<<". "<<mediaFiles[i]->getPathMedia()<<std::endl;
-    }
+    if(flag == 'c'){mediaManagement.showCurrentPage();}
+    if(flag == 'n'){mediaManagement.showNextPage();}
+    if(flag == 'p'){mediaManagement.showPreviousPage();}
+    std::cout<<"\n[Next page] (press n)\t[Previous page] (press p)\t[Back] (press b)\n";
     std::cout<<"\n==============================================================\n";
 }
 

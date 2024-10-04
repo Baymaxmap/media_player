@@ -217,7 +217,7 @@ void MediaManagement::showCurrentPage(){
     }
     size_t start = mCurrentPage * ITEMS_PER_PAGE;
     size_t end = ((mMediaManager.size() < (start + ITEMS_PER_PAGE))? mMediaManager.size() :(start + ITEMS_PER_PAGE));
-    ViewMedia::showMediaInfPerPage(mMediaManager, start, end);
+    ViewMedia::showMediaInfPerPage(mMediaManager, mCurrentPage, start, end);
 }
 
 //show media files next page
@@ -227,14 +227,16 @@ void MediaManagement::showNextPage(){
         showCurrentPage();
     }
     else{
-        std::cout<<"You are on the last page!\n";
+        showCurrentPage();
+        std::cout<<"\nYou are on the last page!\n";
     }
 }
 
 //show media files in previous page
 void MediaManagement::showPreviousPage(){
     if(mCurrentPage == 0){
-        std::cout<<"You are on the first page!\n";
+        showCurrentPage();
+        std::cout<<"\nYou are on the first page!\n";
         return;
     }
     mCurrentPage--;

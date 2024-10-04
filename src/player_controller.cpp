@@ -1,7 +1,7 @@
 #include "player_controller.h"
 PlayerMediaController* PlayerMediaController::sControllerInstance = nullptr;
 
-PlayerMediaController::PlayerMediaController() : mIsPlaying(false), mTimePaused(0), mVolume(50){
+PlayerMediaController::PlayerMediaController() : mIsPlaying(false), mTimePaused(0), mVolume(MIX_MAX_VOLUME){
     mMusic = nullptr;
     sControllerInstance = this;
 }
