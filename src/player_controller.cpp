@@ -95,7 +95,7 @@ void PlayerMediaController::end(){
 }
 
 //play next track in playlist
-void PlayerMediaController::nextTrackInPlaylist(){
+void PlayerMediaController::nextTrack(){
     ++mCurrentTrack;
     if(mCurrentTrack==mListToPlay.end()){
         mCurrentTrack = mListToPlay.begin();
@@ -104,7 +104,7 @@ void PlayerMediaController::nextTrackInPlaylist(){
 }
 
 //play previous track in playlist
-void PlayerMediaController::previousTrackInPlaylist(){
+void PlayerMediaController::previousTrack(){
     if(mCurrentTrack == mListToPlay.begin()){
         mCurrentTrack = mListToPlay.end();
     }
@@ -146,15 +146,15 @@ void PlayerMediaController::decreaseVolume(){
 
 //*********************************** MANAGE AUTO PLAY NEXT WHEN A SONG ENDED ***********************************/
 //function when end a media file
-void PlayerMediaController::musicEndedPlaylistStatic(){
+void PlayerMediaController::musicEndedStatic(){
 
     // call static function to call non-static function
     if (sControllerInstance) {
-        sControllerInstance->musicEndedPlaylist();
+        sControllerInstance->musicEnded();
     }
 }
 
-void PlayerMediaController::musicEndedPlaylist(){
+void PlayerMediaController::musicEnded(){
     std::cout << "\nTrack finished playing." << std::endl;
 
     // Move to the next track
@@ -211,7 +211,7 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
     init();
     mIsPlaying =false;
     //call static function to call a non static function
-    Mix_HookMusicFinished(musicEndedPlaylistStatic);
+    Mix_HookMusicFinished(musicEndedStatic);
 
     mListToPlay = playlist->getPathAllFiles();
     mCurrentTrack = mListToPlay.begin();
@@ -259,7 +259,7 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
             case '4':
             {
                 ViewMedia::clearScreen();
-                nextTrackInPlaylist();
+                nextTrack();
                 std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
                 playMusic.detach();
                 break;
@@ -267,7 +267,7 @@ void PlayerMediaController::runPlaylist(std::shared_ptr<Playlist> playlist){
             case '5':
             {
                 ViewMedia::clearScreen();
-                previousTrackInPlaylist();
+                previousTrack();
                 std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
                 playMusic.detach();
                 break;
@@ -317,7 +317,7 @@ void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFil
     mIsPlaying = false;
     init();
     //call static function to call a non static function
-    Mix_HookMusicFinished(musicEndedPlaylistStatic);
+    Mix_HookMusicFinished(musicEndedStatic);
 
     std::list<std::string> tempList;
     for(auto& it : listMediaFiles){
@@ -371,7 +371,7 @@ void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFil
             case '4':
             {
                 ViewMedia::clearScreen();
-                nextTrackInPlaylist();
+                nextTrack();
                 std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
                 playMusic.detach();
                 break;
@@ -379,7 +379,7 @@ void PlayerMediaController::runListMediaFiles(std::list<std::shared_ptr<MediaFil
             case '5':
             {
                 ViewMedia::clearScreen();
-                previousTrackInPlaylist();
+                previousTrack();
                 std::thread playMusic(&PlayerMediaController::showTimeInRealTime, this);
                 playMusic.detach();
                 break;
